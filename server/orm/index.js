@@ -26,4 +26,10 @@ Room.belongsToMany(User, {through: Members});
 User.belongsToMany(Room, {through: Chats});
 Room.belongsToMany(User, {through: Chats});
 
-module.exports = sequelize
+module.exports = {
+  sequelize,
+  User,
+  Room,
+  Members,
+  Chats,
+}
