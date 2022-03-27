@@ -18,9 +18,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOption));
 app.use(express.urlencoded({ extended: true }));
 
-const accountRouter = require("./src/router/account")
+const accountRouter = require("./src/router/account");
+const roomRouter = require("./src/router/room");
 
 app.use("/account", accountRouter);
+app.use("/room", roomRouter);
 
 app.get("/", (req, res) => {
   res.status(201).send("hello");
