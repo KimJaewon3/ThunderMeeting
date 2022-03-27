@@ -1,11 +1,18 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import SignIn from "../component/signIn";
 import SignUp from "../component/signUp";
+import { RootState } from "../modules";
+import { isSignIn } from "../modules/sign";
+import { getAccessToken } from "../modules/token";
+import { deleteUserInfo } from "../modules/userInfo";
 
 export default function Menu() {
+  const dispatch = useDispatch();
   const [ isSignInOpen, setIsSignInOpen ] = useState(false);
   const [ isSignUpOpen, setIsSignUpOpen ] = useState(false);
+  const isSignInState = useSelector((state: RootState) => state.signReducer.isSignIn);
 
   function handleSignInClick(val: boolean) {
     setIsSignInOpen(val);
@@ -26,11 +33,22 @@ export default function Menu() {
     }
   }
 
+  function handleSignInOrOut() {
+    if (!isSignInState) {
+      handleSignInClick(true);
+    } else {
+      // sign out (token, sign)
+      dispatch(getAccessToken(''));
+      dispatch(isSignIn(false));
+      dispatch(deleteUserInfo());
+    }
+  }
+
   return (
     <div>
       <NavLink to={'/'}>로고(intro)</NavLink>
       <NavLink to={'/main'}>thunder(main)</NavLink>
-      <div onClick={()=>handleSignInClick(true)}>sign in</div>
+      <div onClick={handleSignInOrOut}>{isSignInState ? 'sign out' : 'sign in'}</div>
 
       {
         isSignInOpen && 
