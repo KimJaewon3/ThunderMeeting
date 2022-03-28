@@ -9,7 +9,10 @@ async function singIn(req, res) {
       where: {
         email: email,
         password: password,
-      }
+      },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'password']
+      },
     });
 
     if (!findResult) {
@@ -18,7 +21,7 @@ async function singIn(req, res) {
 
     const accessToken = jwt.sign({...findResult}, process.env.ACCESS_SECRET, {
       expiresIn: "1d",
-    })
+    });
 
     return res.status(200).json({ data: {
       userInfo: findResult,

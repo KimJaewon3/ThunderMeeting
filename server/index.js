@@ -20,6 +20,7 @@ async function dbSync() {
 }
 
 app.listen(PORT, () => {
+  //dbSync()
   console.log(`Server Listening on ${PORT}`);
   //testDBConnection();
 });

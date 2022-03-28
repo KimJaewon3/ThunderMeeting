@@ -14,6 +14,7 @@ const persistConfig = {
     'userInfoReducer',
     'tokenReducer',
     'signReducer',
+    'roomReducer',
   ],
 };
 

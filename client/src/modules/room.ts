@@ -3,11 +3,17 @@
 // action type
 const UPDATE_ROOM_LIST = 'room/UPDATE_ROOM_LIST' as const;
 
+export type RoomType = {
+  id: number;
+  title: string;
+  intro: string;
+}
+
 // action function
-export const updateRoomList = (roomInfo: any[]) => {
+export const updateRoomList = (roomList: RoomType[]) => {
   return {
     type: UPDATE_ROOM_LIST,
-    payload: roomInfo,
+    payload: roomList,
   }
 }
 
@@ -17,7 +23,7 @@ type RoomAction =
 
 // state type
 type RoomState = {
-  roomList: any[];
+  roomList: RoomType[];
 }
 
 // state
@@ -32,7 +38,7 @@ function roomReducer(
 ): RoomState {
   switch (action.type) {
     case UPDATE_ROOM_LIST: 
-      return Object.assign({}, state, action.payload);
+      return Object.assign({}, state, {roomList: action.payload});
     default:
       return state;
   }
