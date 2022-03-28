@@ -20,11 +20,15 @@ const Room = sequelize.define('room', room, {freezeTableName: true});
 const Members = sequelize.define('members', members, {freezeTableName: true});
 const Chats = sequelize.define('chats', chats, {freezeTableName: true});
 
-User.belongsToMany(Room, {through: Members});
-Room.belongsToMany(User, {through: Members});
+User.hasMany(Members);
+Members.belongsTo(User);
+Room.hasMany(Members);
+Members.belongsTo(Room);
 
-User.belongsToMany(Room, {through: Chats});
-Room.belongsToMany(User, {through: Chats});
+User.hasMany(Chats);
+Chats.belongsTo(User);
+Room.hasMany(Chats);
+Chats.belongsTo(Room);
 
 module.exports = {
   sequelize,

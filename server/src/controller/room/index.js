@@ -1,4 +1,7 @@
+const { createRoom } = require("./createRoom")
+const { roomList } = require("./roomList")
+
 module.exports = {
-  createRoom: require("./createRoom"),
-  roomList: require("./roomList"),
+  createRoom,
+  roomList,
 }

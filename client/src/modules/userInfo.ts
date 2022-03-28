@@ -1,7 +1,7 @@
 // Ducks patten (action type, action function, reducer in single file)
 
 // action type
-const GET_USER_INFO = 'userInfo/UPDATE_USER_INFO' as const;
+const UPDATE_USER_INFO = 'userInfo/UPDATE_USER_INFO' as const;
 const DELETE_USER_INFO = 'userInfo/DELETE_USER_INFO' as const;
 
 export type userInfoType = {
@@ -15,9 +15,9 @@ export type userInfoType = {
 };
 
 // action function
-export const getUserInfo = (userInfo: userInfoType) => {
+export const updateUserInfo = (userInfo: userInfoType) => {
   return {
-    type: GET_USER_INFO,
+    type: UPDATE_USER_INFO,
     payload: userInfo,
   }
 }
@@ -30,7 +30,7 @@ export const deleteUserInfo = () => {
 
 // action type
 type UserInfoAction = 
-  |ReturnType<typeof getUserInfo>
+  |ReturnType<typeof updateUserInfo>
   |ReturnType<typeof deleteUserInfo>
 
 // state type
@@ -61,18 +61,10 @@ function userInfoReducer(
   action: UserInfoAction
 ): UserInfoState {
   switch (action.type) {
-    case GET_USER_INFO: 
-      return Object.assign({}, state, action.payload);
+    case UPDATE_USER_INFO: 
+      return Object.assign({}, action.payload);
     case DELETE_USER_INFO:
-      return { 
-        id: 0,
-        email: '',
-        name: '',
-        nick: '',
-        mbti: null,
-        phone: '',
-        like: 0,
-      }
+      return initialState
     default:
       return state;
   }

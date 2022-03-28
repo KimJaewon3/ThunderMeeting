@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { APIURL } from "../App";
 import { isSignIn } from "../modules/sign";
-import { getAccessToken } from "../modules/token";
-import { getUserInfo } from "../modules/userInfo";
+import { updateAccessToken } from "../modules/token";
+import { updateUserInfo } from "../modules/userInfo";
 
 type Props = {
   handleSignInClick: (val: boolean) => void;
@@ -32,9 +32,9 @@ export default function SignIn({ handleSignInClick, handleSignUpClick }: Props) 
     APIURL
       .post('/account/signIn', textInput)
       .then(res => {
-        console.log(res)
-        dispatch(getUserInfo(res.data.data.uerInfo));
-        dispatch(getAccessToken(res.data.data.accessToken));
+        console.log(res.data.data)
+        dispatch(updateUserInfo(res.data.data.userInfo));
+        dispatch(updateAccessToken(res.data.data.accessToken));
         dispatch(isSignIn(true));
         handleSignInClick(false);
       })

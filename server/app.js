@@ -20,9 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const accountRouter = require("./src/router/account");
 const roomRouter = require("./src/router/room");
+const membersRouter = require("./src/router/members")
 
 app.use("/account", accountRouter);
 app.use("/room", roomRouter);
+app.use("/members", membersRouter);
 
 app.get("/", (req, res) => {
   res.status(201).send("hello");

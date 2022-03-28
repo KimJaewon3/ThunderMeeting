@@ -5,7 +5,7 @@ import SignIn from "../component/signIn";
 import SignUp from "../component/signUp";
 import { RootState } from "../modules";
 import { isSignIn } from "../modules/sign";
-import { getAccessToken } from "../modules/token";
+import { updateAccessToken } from "../modules/token";
 import { deleteUserInfo } from "../modules/userInfo";
 
 export default function Menu() {
@@ -38,7 +38,7 @@ export default function Menu() {
       handleSignInClick(true);
     } else {
       // sign out (token, sign)
-      dispatch(getAccessToken(''));
+      dispatch(updateAccessToken(''));
       dispatch(isSignIn(false));
       dispatch(deleteUserInfo());
     }
