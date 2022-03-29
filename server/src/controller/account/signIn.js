@@ -29,7 +29,7 @@ async function singIn(req, res) {
     }, message: '로그인 성공'});
   } catch(err) {
     console.log(err);
-    return res.status(500).json({ message: 'server err', data: err });
+    return res.status(500).json({ message: 'sign in server err', data: err });
   }
 }
 

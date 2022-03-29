@@ -63,7 +63,7 @@ export default function Room() {
       userId: userInfo.id,
     })
     .then((res) => {
-      console.log(res)
+      // console.log(res)
     })
     .catch(err => console.log(err));
 
@@ -78,6 +78,13 @@ export default function Room() {
     })
     .catch(err => console.log(err));
 
+    await APIURL.post('/chats/getChats', {
+      roomId: roomInfo.id,
+    })
+    .then(res => {
+      console.log(res)
+    })
+
     // chat 기존 로컬 저장값
     const target = chatInfo.filter(el => el.roomId === roomInfo.id);
     if (target.length !== 0) {
@@ -85,10 +92,20 @@ export default function Room() {
     }
   }
 
-  function sendMsg(msgInfo: ChatType) {
+  async function sendMsg(msgInfo: ChatType) {
     console.log('send msg', msgInfo)
     socketClient.emit('send_msg', { roomId: roomInfo.id, msgInfo: msgInfo });
     // braodcast라서 수동 추가해줘야함
+    await APIURL.post('chats/createChats', {
+      content: msgInfo.msg,
+      createdAt: msgInfo.createdAt,
+      userId: msgInfo.written.userId,
+      roomId: roomInfo.id,
+    })
+    .then(res=> {
+      console.log(res)
+    })
+
     dispatchMsg(msgInfo);
   }
 
@@ -128,6 +145,4 @@ export default function Room() {
     </div>
   );
 }
-//
-//<div>{locationState.roomInfo.title}</div>
-//<div>{locationState.roomInfo.intro}</div>
+ 

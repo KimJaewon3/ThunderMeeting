@@ -26,7 +26,7 @@ const server = http.createServer(app);
 webSocket(server);
 
 server.listen(PORT, () => {
-  //dbSync()
+  // dbSync()
   console.log(`Server Listening on ${PORT}`);
-  //testDBConnection();
+  // testDBConnection();
 });
