@@ -16,7 +16,6 @@ type Location = {
 let socketClient: Socket;
 
 export default function Room() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as Location;
@@ -25,7 +24,6 @@ export default function Room() {
   const [ chats, setChats ] = useState<ChatType[]>([]);
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
-  const chatInfo = useSelector((state: RootState) => state.chatReducer.chat);
   
   useEffect(() => {
     apiCallBack();
@@ -44,6 +42,7 @@ export default function Room() {
     });
 
     socketClient.on('noti_join_room', data => {
+      //
       console.log(data);
     });
 
@@ -55,9 +54,18 @@ export default function Room() {
       console.log('receive msg', msgInfo);
       dispatchMsg(msgInfo);
     });
+
+    socketClient.on('user_left', data => {
+      console.log(data);
+    });
+
+    return () => {
+      socketClient.disconnect();
+    };
   }, []);
 
   async function apiCallBack() {
+    // 방 맴버에 추가 (신규)
     await APIURL.post('/members/joinMembers',{
       roomId: roomInfo.id,
       userId: userInfo.id,
@@ -67,6 +75,7 @@ export default function Room() {
     })
     .catch(err => console.log(err));
 
+    // 방 맴버 리스트 가져오기
     await APIURL.post('/members/getMembers', {
       roomId: roomInfo.id,
     })
@@ -78,24 +87,34 @@ export default function Room() {
     })
     .catch(err => console.log(err));
 
+    // 방 채팅 로그 가져오기
     await APIURL.post('/chats/getChats', {
       roomId: roomInfo.id,
     })
     .then(res => {
-      console.log(res)
+      // console.log(res.data.data);
+      const log = res.data.data;
+      
+      setChats(chats => log.map((el: any)  => {
+        return {
+          msg: el.content,
+          createdAt: el.createdAt,
+          written: {
+            userId: el.user.id,
+            nick: el.user.nick,
+          }
+        }
+      }));
     })
-
-    // chat 기존 로컬 저장값
-    const target = chatInfo.filter(el => el.roomId === roomInfo.id);
-    if (target.length !== 0) {
-      setChats(target[0].chats);
-    }
+    .catch(err => console.log(err));
   }
 
   async function sendMsg(msgInfo: ChatType) {
-    console.log('send msg', msgInfo)
+    // console.log('send msg', msgInfo)
+    // emit
     socketClient.emit('send_msg', { roomId: roomInfo.id, msgInfo: msgInfo });
-    // braodcast라서 수동 추가해줘야함
+    
+    // db
     await APIURL.post('chats/createChats', {
       content: msgInfo.msg,
       createdAt: msgInfo.createdAt,
@@ -103,23 +122,19 @@ export default function Room() {
       roomId: roomInfo.id,
     })
     .then(res=> {
-      console.log(res)
+      // console.log(res);
     })
+    .catch(err => console.log(err));
 
+    // state - broadcast라서 수동 갱신
     dispatchMsg(msgInfo);
   }
 
   function dispatchMsg(msgInfo: ChatType) {
-    dispatch(updateChat({
-      roomId: roomInfo.id,
-      chat: msgInfo
-    }));
     setChats(chats => [...chats, msgInfo]);
   }
 
   function leaveRoom() {
-    // redux에서도 삭제
-    socketClient.disconnect();
     navigate('/main');
   }
 
@@ -139,7 +154,7 @@ export default function Room() {
         )})}
       </div>
 
-      <Chat sendMsg={sendMsg} roomId={roomInfo.id} chats={chats} ></Chat>
+      <Chat sendMsg={sendMsg} chats={chats} ></Chat>
 
       <div onClick={leaveRoom}>방 나가기</div>
     </div>

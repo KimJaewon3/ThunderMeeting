@@ -6,15 +6,13 @@ import { ChatType } from "../modules/chat"
 
 type Props = {
   sendMsg: (msgInfo: ChatType) => void;
-  roomId: number;
   chats: ChatType[];
 }
 
-export default function Chat({ sendMsg, roomId, chats }: Props) {
+export default function Chat({ sendMsg, chats }: Props) {
   const [ textInput, setTextInput ] = useState('');
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
-  const chatInfo = useSelector((state: RootState) => state.chatReducer.chat);
   
   function handleSendBtn() {
     sendMsg({
@@ -35,12 +33,13 @@ export default function Chat({ sendMsg, roomId, chats }: Props) {
   return (
     <div>
       <div>
-        {chats.map((el, idx) => {
+        {
+        chats.map((el, idx) => {
           return (
             <div key={idx}>{el.msg}</div>
           )
         })
-        } 
+      } 
       </div>
 
       <div>
@@ -50,3 +49,8 @@ export default function Chat({ sendMsg, roomId, chats }: Props) {
     </div>
   )
 };
+
+
+// 누가 들어왔을때 나갈때 갱신
+// 나갈때 왜 두번찍힘
+// 방에 남은 인원 없으면 디비에서 챗다 지워
