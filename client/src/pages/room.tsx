@@ -22,11 +22,14 @@ export default function Room() {
   const locationState = location.state as Location;
   const roomInfo = locationState.roomInfo;
   const [ memberList, setMemberList ] = useState<any[]>([]);
+  const [ chats, setChats ] = useState<ChatType[]>([]);
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   const chatInfo = useSelector((state: RootState) => state.chatReducer.chat);
   
   useEffect(() => {
+    apiCallBack();
+
     socketClient = io('http://localhost:4000', {
       withCredentials: true,
     });
@@ -49,16 +52,9 @@ export default function Room() {
     });
 
     socketClient.on('receive_msg', msgInfo => {
-      console.log('receive msg', msgInfo)
-      dispatch(updateChat({
-        roomId: roomInfo.id,
-        chat: msgInfo
-      }));
+      console.log('receive msg', msgInfo);
+      dispatchMsg(msgInfo);
     });
-  }, []);
-
-  useEffect(() => {
-    apiCallBack();
   }, []);
 
   async function apiCallBack() {
@@ -81,16 +77,27 @@ export default function Room() {
       })
     })
     .catch(err => console.log(err));
+
+    // chat 기존 로컬 저장값
+    const target = chatInfo.filter(el => el.roomId === roomInfo.id);
+    if (target.length !== 0) {
+      setChats(target[0].chats);
+    }
   }
 
   function sendMsg(msgInfo: ChatType) {
     console.log('send msg', msgInfo)
     socketClient.emit('send_msg', { roomId: roomInfo.id, msgInfo: msgInfo });
     // braodcast라서 수동 추가해줘야함
+    dispatchMsg(msgInfo);
+  }
+
+  function dispatchMsg(msgInfo: ChatType) {
     dispatch(updateChat({
       roomId: roomInfo.id,
       chat: msgInfo
     }));
+    setChats(chats => [...chats, msgInfo]);
   }
 
   function leaveRoom() {
@@ -115,7 +122,7 @@ export default function Room() {
         )})}
       </div>
 
-      <Chat sendMsg={sendMsg} roomId={roomInfo.id} ></Chat>
+      <Chat sendMsg={sendMsg} roomId={roomInfo.id} chats={chats} ></Chat>
 
       <div onClick={leaveRoom}>방 나가기</div>
     </div>

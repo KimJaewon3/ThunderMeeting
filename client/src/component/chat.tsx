@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { RootState } from "../modules";
 import { ChatType } from "../modules/chat"
@@ -7,14 +7,15 @@ import { ChatType } from "../modules/chat"
 type Props = {
   sendMsg: (msgInfo: ChatType) => void;
   roomId: number;
+  chats: ChatType[];
 }
 
-export default function Chat({ sendMsg, roomId }: Props) {
+export default function Chat({ sendMsg, roomId, chats }: Props) {
   const [ textInput, setTextInput ] = useState('');
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   const chatInfo = useSelector((state: RootState) => state.chatReducer.chat);
-
+  
   function handleSendBtn() {
     sendMsg({
       msg: textInput,
@@ -34,17 +35,11 @@ export default function Chat({ sendMsg, roomId }: Props) {
   return (
     <div>
       <div>
-        {chatInfo
-          .filter(el => el.roomId === roomId)[0].chats
-          .map((msg, idx) => {
-            return (
-              <div key={idx}>
-                <p>{msg.written.nick}</p>
-                <p>{msg.msg}</p>
-                <p>{msg.createdAt}</p>
-              </div>
-            )
-          })
+        {chats.map((el, idx) => {
+          return (
+            <div key={idx}>{el.msg}</div>
+          )
+        })
         } 
       </div>
 
