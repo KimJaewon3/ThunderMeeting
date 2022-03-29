@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import chatReducer from './chat';
 import roomReducer from './room';
 import signReducer from './sign';
 import tokenReducer from './token';
@@ -15,6 +16,7 @@ const persistConfig = {
     'tokenReducer',
     'signReducer',
     'roomReducer',
+    'chatReducer',
   ],
 };
 
@@ -23,6 +25,7 @@ const rootReducer = combineReducers({
   tokenReducer,
   signReducer,
   roomReducer,
+  chatReducer,
 });
 
 export const persistedReducer = persistReducer<any, any>(persistConfig, rootReducer);
