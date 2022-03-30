@@ -22,6 +22,7 @@ export default function Room() {
   const roomInfo = locationState.roomInfo;
   const [ memberList, setMemberList ] = useState<any[]>([]);
   const [ chats, setChats ] = useState<ChatType[]>([]);
+  const [ adminNoti, setAdminNoti ] = useState('');
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   
@@ -38,25 +39,34 @@ export default function Room() {
 
     socketClient.emit('join_room', {
       roomId: roomInfo.id,
-      userNick: userInfo.nick,
+      userInfo: userInfo,
     });
 
     socketClient.on('noti_join_room', data => {
-      //
-      console.log(data);
+      setMemberList(memberList => {
+        const memberIdx = memberList.findIndex(el => {
+          return el.id === data.id;
+        });
+
+        if (memberIdx === -1) {
+          return [...memberList, data];
+        } else {
+          return memberList;
+        }
+      });
+      setAdminNoti(`${data.nick}님이 입장하셨습니다`);
     });
 
     socketClient.on("user_left", data => {
-      console.log(data);
+      setMemberList(memberList => memberList.filter(el => {
+        return el.id !== data.id;
+      }));
+      setAdminNoti(`${data.nick}님이 떠났습니다`);
     });
 
     socketClient.on('receive_msg', msgInfo => {
       console.log('receive msg', msgInfo);
       dispatchMsg(msgInfo);
-    });
-
-    socketClient.on('user_left', data => {
-      console.log(data);
     });
 
     return () => {
@@ -66,7 +76,7 @@ export default function Room() {
 
   async function apiCallBack() {
     // 방 맴버에 추가 (신규)
-    await APIURL.post('/members/joinMembers',{
+    await APIURL.post('/members/joinMembers', {
       roomId: roomInfo.id,
       userId: userInfo.id,
     })
@@ -81,9 +91,10 @@ export default function Room() {
     })
     .then(res => {
       // console.log(res.data.data);
-      setMemberList(memberList => {
-        return res.data.data
-      })
+      const data = res.data.data;
+      setMemberList(memberList => data.map((el: any) => {
+        return el.user;
+      }));
     })
     .catch(err => console.log(err));
 
@@ -135,6 +146,11 @@ export default function Room() {
   }
 
   function leaveRoom() {
+    // 명시적으로 나갔을떄만 맴버에서 떠남 // 잠깐 어디 갓다오는건 상관 x
+    APIURL.post("/members/leaveMembers", {
+      userId: userInfo.id,
+      roomId: roomInfo.id,
+    });
     navigate('/main');
   }
 
@@ -145,14 +161,21 @@ export default function Room() {
       <div>{roomInfo.title}</div>
       <div>{roomInfo.intro}</div>
 
+      <hr/>
+
+      <div>{adminNoti}</div>
+
       <div>
-        {memberList.map(data => {
+        {memberList.map((el, idx) => {
+          // console.log(memberList)
           return (
-            <div key={data.id}>
-              <div>{data.user.name}</div>
+            <div key={idx}>
+              <div>{el.nick}</div>
             </div>
         )})}
       </div>
+
+      <hr/>
 
       <Chat sendMsg={sendMsg} chats={chats} ></Chat>
 

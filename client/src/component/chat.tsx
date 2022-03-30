@@ -49,8 +49,3 @@ export default function Chat({ sendMsg, chats }: Props) {
     </div>
   )
 };
-
-
-// 누가 들어왔을때 나갈때 갱신
-// 나갈때 왜 두번찍힘
-// 방에 남은 인원 없으면 디비에서 챗다 지워

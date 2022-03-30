@@ -18,10 +18,24 @@ function webSocket(server) {
     // 연결 해제
     socket.on('disconnecting', reason => {
       console.log(reason);
+      let data;
+      rooms.forEach(el => {
+        el.members.forEach(member => {
+          if (member.socketId === socket.id) {
+            data = member.userInfo;
+          }
+        })
+      })
+
+      for (const room of socket.rooms) {
+        if (room !== socket.id) {
+          socket.to(room).emit("user_left", data);
+        }
+      }
     });
 
     // 방 참여시
-    socket.on('join_room', ({ roomId, userNick }) => {
+    socket.on('join_room', ({ roomId, userInfo }) => {
       const roomIndex = rooms.findIndex(el => el.roomId === roomId);
       // 방금 생성한 방일때
       if (roomIndex === -1) {
@@ -30,7 +44,7 @@ function webSocket(server) {
           members: [
             {
               socketId: socket.id,
-              userNick: userNick
+              userInfo: userInfo
             },
           ]
         });
@@ -38,12 +52,12 @@ function webSocket(server) {
         // 참여한 방이면
         rooms[roomIndex].members.push({
           socketId: socket.id,
-          userNick: userNick,
+          userInfo: userInfo,
         });
       }
       
       socket.join(roomId);
-      io.to(roomId).emit('noti_join_room', `${userNick}님이 방에 입장하셨습니다`);
+      socket.broadcast.to(roomId).emit('noti_join_room', userInfo);
       console.log(socket.rooms);
     });
 
