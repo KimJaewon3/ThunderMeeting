@@ -15,10 +15,10 @@ const sequelize = new Sequelize(
   }
 );
 
-const User = sequelize.define('user', user, {freezeTableName: true});
-const Room = sequelize.define('room', room, {freezeTableName: true});
-const Members = sequelize.define('members', members, {freezeTableName: true});
-const Chats = sequelize.define('chats', chats, {freezeTableName: true});
+const User = sequelize.define('user', user, { freezeTableName: true });
+const Room = sequelize.define('room', room, { freezeTableName: true });
+const Members = sequelize.define('members', members, { freezeTableName: true });
+const Chats = sequelize.define('chats', chats, { freezeTableName: true, timestamps: false });
 
 User.hasMany(Members);
 Members.belongsTo(User);

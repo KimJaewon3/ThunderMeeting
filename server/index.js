@@ -1,6 +1,8 @@
 require("dotenv").config();
 const { sequelize } = require("./orm/index.js") 
 const app = require("./app.js");
+const { webSocket } = require("./socket/index.js");
+const http = require('http');
 
 const PORT = process.env.PORT;
 
@@ -19,8 +21,12 @@ async function dbSync() {
   console.log("All models were synchronized successfully.");
 }
 
-app.listen(PORT, () => {
-  //dbSync()
+const server = http.createServer(app);
+
+webSocket(server);
+
+server.listen(PORT, () => {
+  // dbSync()
   console.log(`Server Listening on ${PORT}`);
-  //testDBConnection();
+  // testDBConnection();
 });
