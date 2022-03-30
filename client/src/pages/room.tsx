@@ -22,6 +22,7 @@ export default function Room() {
   const roomInfo = locationState.roomInfo;
   const [ memberList, setMemberList ] = useState<any[]>([]);
   const [ chats, setChats ] = useState<ChatType[]>([]);
+  const [ adminNoti, setAdminNoti ] = useState('');
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   
@@ -53,12 +54,14 @@ export default function Room() {
           return memberList;
         }
       });
+      setAdminNoti(`${data.nick}님이 입장하셨습니다`);
     });
 
     socketClient.on("user_left", data => {
       setMemberList(memberList => memberList.filter(el => {
         return el.id !== data.id;
       }));
+      setAdminNoti(`${data.nick}님이 떠났습니다`);
     });
 
     socketClient.on('receive_msg', msgInfo => {
@@ -68,7 +71,6 @@ export default function Room() {
 
     return () => {
       socketClient.disconnect();
-      
     };
   }, []);
 
@@ -151,7 +153,7 @@ export default function Room() {
     });
     navigate('/main');
   }
-  
+
   return (
     <div>
       <div>room</div>
@@ -159,15 +161,21 @@ export default function Room() {
       <div>{roomInfo.title}</div>
       <div>{roomInfo.intro}</div>
 
+      <hr/>
+
+      <div>{adminNoti}</div>
+
       <div>
         {memberList.map((el, idx) => {
           // console.log(memberList)
           return (
             <div key={idx}>
-              <div>{el.name}</div>
+              <div>{el.nick}</div>
             </div>
         )})}
       </div>
+
+      <hr/>
 
       <Chat sendMsg={sendMsg} chats={chats} ></Chat>
 
