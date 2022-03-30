@@ -50,7 +50,7 @@ export default function CreateRoom({ handleCreateRoomModalOpen }: Props) {
         <input onChange={e=>handleTextInput('intro', e)}></input>
       </div>
 
-      <button onClick={handleCreateBtnClick}></button>
+      <button onClick={handleCreateBtnClick}>방 생성하기</button>
     </div>
   ) 
 }

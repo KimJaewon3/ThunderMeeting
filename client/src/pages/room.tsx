@@ -38,16 +38,27 @@ export default function Room() {
 
     socketClient.emit('join_room', {
       roomId: roomInfo.id,
-      userNick: userInfo.nick,
+      userInfo: userInfo,
     });
 
     socketClient.on('noti_join_room', data => {
-      //
-      console.log(data);
+      setMemberList(memberList => {
+        const memberIdx = memberList.findIndex(el => {
+          return el.id === data.id;
+        });
+
+        if (memberIdx === -1) {
+          return [...memberList, data];
+        } else {
+          return memberList;
+        }
+      });
     });
 
     socketClient.on("user_left", data => {
-      console.log(data);
+      setMemberList(memberList => memberList.filter(el => {
+        return el.id !== data.id;
+      }));
     });
 
     socketClient.on('receive_msg', msgInfo => {
@@ -55,18 +66,15 @@ export default function Room() {
       dispatchMsg(msgInfo);
     });
 
-    socketClient.on('user_left', data => {
-      console.log(data);
-    });
-
     return () => {
       socketClient.disconnect();
+      
     };
   }, []);
 
   async function apiCallBack() {
     // 방 맴버에 추가 (신규)
-    await APIURL.post('/members/joinMembers',{
+    await APIURL.post('/members/joinMembers', {
       roomId: roomInfo.id,
       userId: userInfo.id,
     })
@@ -81,9 +89,10 @@ export default function Room() {
     })
     .then(res => {
       // console.log(res.data.data);
-      setMemberList(memberList => {
-        return res.data.data
-      })
+      const data = res.data.data;
+      setMemberList(memberList => data.map((el: any) => {
+        return el.user;
+      }));
     })
     .catch(err => console.log(err));
 
@@ -135,9 +144,14 @@ export default function Room() {
   }
 
   function leaveRoom() {
+    // 명시적으로 나갔을떄만 맴버에서 떠남 // 잠깐 어디 갓다오는건 상관 x
+    APIURL.post("/members/leaveMembers", {
+      userId: userInfo.id,
+      roomId: roomInfo.id,
+    });
     navigate('/main');
   }
-
+  
   return (
     <div>
       <div>room</div>
@@ -146,10 +160,11 @@ export default function Room() {
       <div>{roomInfo.intro}</div>
 
       <div>
-        {memberList.map(data => {
+        {memberList.map((el, idx) => {
+          // console.log(memberList)
           return (
-            <div key={data.id}>
-              <div>{data.user.name}</div>
+            <div key={idx}>
+              <div>{el.name}</div>
             </div>
         )})}
       </div>
