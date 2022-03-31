@@ -22,7 +22,8 @@ export default function Chat({ sendMsg, chats }: Props) {
         userId: userInfo.id,
         nick: userInfo.nick,
       }
-    })
+    });
+    setTextInput('');
   }
 
   function chatCreatedAt() {
@@ -35,15 +36,24 @@ export default function Chat({ sendMsg, chats }: Props) {
       <div>
         {
         chats.map((el, idx) => {
+          const color = el.written.userId === userInfo.id ? 'yellow' : 'gray'; 
           return (
-            <div key={idx}>{el.msg}</div>
+            <div key={idx} style={{backgroundColor: color}}>
+              <div>{el.written.nick}</div>
+              <div>{el.msg}</div>
+              <div>{el.createdAt}</div>
+            </div>
           )
         })
       } 
       </div>
 
       <div>
-        <input onChange={(e)=>setTextInput(e.target.value)}></input>
+        <input 
+          onChange={(e)=>setTextInput(e.target.value)}
+          onKeyDown={(e)=>e.key==='Enter'&&handleSendBtn()}
+          value={textInput}
+        ></input>
         <button onClick={handleSendBtn}>전송</button>
       </div>
     </div>

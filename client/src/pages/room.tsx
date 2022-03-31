@@ -146,6 +146,13 @@ export default function Room() {
   }
 
   function leaveRoom() {
+    // 떠날때 남은인원이 혼자라면 방도 같이 삭제되어야 함
+    if (memberList.length === 1) {
+      APIURL.delete(`room/deleteRoom/${roomInfo.id}`)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+    }
+
     // 명시적으로 나갔을떄만 맴버에서 떠남 // 잠깐 어디 갓다오는건 상관 x
     APIURL.post("/members/leaveMembers", {
       userId: userInfo.id,
