@@ -9,6 +9,7 @@ import Room from './pages/room';
 import Mypage from './pages/mypage';
 import Intro from './pages/intro';
 import axios from 'axios';
+import styled from 'styled-components';
 
 export const APIURL = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -16,7 +17,7 @@ export const APIURL = axios.create({
     "content-type": "application/json",
     credentials: true,
   }
-})
+});
 
 function App() {
   return (

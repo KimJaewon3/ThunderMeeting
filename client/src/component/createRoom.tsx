@@ -1,6 +1,14 @@
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { APIURL } from "../App";
+import { StyledCommonModal, StyledButton } from "../App.style";
+
+const StyledModal = styled(StyledCommonModal)`
+  .btn-box {
+    margin: 0 auto;
+  }
+`;
 
 type Props = {
   handleCreateRoomModalOpen: (val: boolean) => void;
@@ -39,7 +47,7 @@ export default function CreateRoom({ handleCreateRoomModalOpen }: Props) {
   }
   
   return (
-    <div>
+    <StyledModal>
       <div>
         <p>방 제목</p>
         <input onChange={e=>handleTextInput('title', e)}></input>
@@ -49,8 +57,10 @@ export default function CreateRoom({ handleCreateRoomModalOpen }: Props) {
         <p>방 소개</p>
         <input onChange={e=>handleTextInput('intro', e)}></input>
       </div>
-
-      <button onClick={handleCreateBtnClick}>방 생성하기</button>
-    </div>
+      
+      <div className="btn-box">
+        <StyledButton onClick={handleCreateBtnClick}>방 생성하기</StyledButton>
+      </div>
+    </StyledModal>
   ) 
 }

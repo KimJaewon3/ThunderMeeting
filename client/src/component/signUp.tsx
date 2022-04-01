@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { APIURL } from "../App";
+import { StyledButton, StyledCommonModal } from "../App.style";
 
+const StyledModal = styled(StyledCommonModal)`
+  align-items: unset;
+  label {
+    margin: 0 1em 0 1em;
+  }
+  .verify-alert {
+    color: red;
+  }
+  .btn-box {
+    justify-content: flex-end;
+  };
+`;
 
 type Props = {
   handleSignUpClick: (val: boolean) => void;
@@ -29,7 +43,7 @@ export default function SignUp({ handleSignUpClick }: Props) {
     const phoneReg = new RegExp('^[0-9]*$');
 
     if (!(emailReg.test(textInput.email))) return '올바른 email을 입력해주세요';
-    if (textInput.password !== textInput.verifyPassword) return '비밀번호를 확인해주세요';
+    if (textInput.password !== textInput.verifyPassword) return '비밀번호 확인을 위해 다시 입력해주세요';
     if (!(nameReg.test(textInput.name))) return '올바른 이름을 입력해주세요';
     if (!(phoneReg.test(textInput.phone))) return '올바른 번호를 입력해주세요';
     
@@ -57,25 +71,36 @@ export default function SignUp({ handleSignUpClick }: Props) {
   }
 
   return (
-    <div>
+    <StyledModal>
+      {Object.keys(textInput).map(key => {
+        return (
+          <div key={key}>
+            <p>{key}</p>
+            <input onChange={(e)=>textInputHandler(key, e)}></input>
+          </div>
+      )})}
       <div>
-        {Object.keys(textInput).map(key => {
-          return (
-            <div key={key}>
-              <p>{key}</p>
-              <input onChange={(e)=>textInputHandler(key, e)}></input>
-            </div>
-        )})}
         <p>sex</p>
-        <input type='checkbox' value='남'></input>
-        <input type='checkbox' value='여'></input>
+        <label>
+          남
+          <input type='checkbox' value='남'></input>
+        </label>
+        <label>
+          여
+          <input type='checkbox' value='여'></input>
+        </label>
       </div>
-
-
-      <div>
-        <button onClick={signUpBtnHandler} disabled={verifyAlert !== ''}>회원가입</button>
-        <p>{verifyAlert}</p>
+      
+      <p className="verify-alert">{verifyAlert}</p>
+      
+      <div className="btn-box">
+        <StyledButton 
+          onClick={signUpBtnHandler}
+          disabled={verifyAlert !== ''}>
+        회원가입
+        </StyledButton>
       </div>
-    </div>
+        
+    </StyledModal>
   );
 }
