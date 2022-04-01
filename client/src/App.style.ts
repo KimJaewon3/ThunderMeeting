@@ -1,16 +1,24 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
+export const StyledNavLink = styled(NavLink)<{ sidebar?: undefined | true }>`
+  :link, :visited {
+    color: ${props => `${props.sidebar ? 'white' : 'black'}`};
+    text-decoration: none;
+  }
+`;
+
 export const StyledModalBack = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-z-index: 2;
-background-color: rgba(201, 201, 201, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba(201, 201, 201, 0.5);
 `;
 
 export const StyledCommonModal = styled.div`

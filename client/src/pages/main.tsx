@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
 import { APIURL } from "../App";
-import { StyledModalBack } from "../App.style";
+import { StyledModalBack, StyledNavLink } from "../App.style";
 import CreateRoom from "../component/createRoom";
 import { RootState } from "../modules";
 import { updateRoomList } from "../modules/room";
@@ -37,9 +36,9 @@ export default function Main() {
       <div>
         {roomList.map(room => {
           return (
-            <NavLink to='/room' key={room.id} state={{roomInfo: room}}>
+            <StyledNavLink to='/room' key={room.id} state={{roomInfo: room}}>
               <div>{room.title} / {room.intro} / members: </div>
-            </NavLink>
+            </StyledNavLink>
         )})}
       </div>
 

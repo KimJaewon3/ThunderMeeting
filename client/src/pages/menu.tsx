@@ -1,28 +1,38 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { StyledModalBack } from "../App.style";
+import { StyledModalBack, StyledNavLink } from "../App.style";
 import SignIn from "../component/signIn";
 import SignUp from "../component/signUp";
 import { RootState } from "../modules";
-import { isSignIn } from "../modules/sign";
-import { updateAccessToken } from "../modules/token";
-import { deleteUserInfo } from "../modules/userInfo";
 import { AiOutlineBars } from 'react-icons/ai';
+import Sidebar from "../component/sidebar";
 
 const StyledMenu = styled.nav`
   display: flex;
   background-color: #ffd448;
-  justify-content: space-between;
   padding: 3em;
+  justify-content: space-between;
+  .sign {
+    width: 5em;
+  }
+`;
+
+const StyledClearModalBack = styled(StyledModalBack)`
+  background-color: rgba(0, 0, 0, 0);
+  justify-content: flex-end;
+  z-index: 3;
 `;
 
 export default function Menu() {
-  const dispatch = useDispatch();
+  const [ isSideBarOpen, setIsSideBarOpen ] = useState(false);
   const [ isSignInOpen, setIsSignInOpen ] = useState(false);
   const [ isSignUpOpen, setIsSignUpOpen ] = useState(false);
   const isSignInState = useSelector((state: RootState) => state.signReducer.isSignIn);
+
+  function handleSidebarOpen(val: boolean) {
+    setIsSideBarOpen(val);
+  }
 
   function handleSignInClick(val: boolean) {
     setIsSignInOpen(val);
@@ -40,27 +50,31 @@ export default function Menu() {
       if (target === 'signUp') {
         setIsSignUpOpen(false);
       }
-    }
-  }
-
-  function handleSignInOrOut() {
-    if (!isSignInState) {
-      handleSignInClick(true);
-    } else {
-      // sign out (token, sign)
-      dispatch(updateAccessToken(''));
-      dispatch(isSignIn(false));
-      dispatch(deleteUserInfo());
+      if (target === 'sidebar') {
+        setIsSideBarOpen(false);
+      }
     }
   }
 
   return (
     <div>
       <StyledMenu>
-        <NavLink to={'/'}>로고(intro)</NavLink>
-        <NavLink to={'/main'}>thunder(main)</NavLink>
-        <div onClick={handleSignInOrOut}>{isSignInState ? <AiOutlineBars/> : 'sign in'}</div>
+        <StyledNavLink to={'/'}>로고(intro)</StyledNavLink>
+        <StyledNavLink to={'/main'}>thunder(main)</StyledNavLink>
+        {isSignInState ? (
+          <div className="sign" onClick={()=>handleSidebarOpen(true)}>
+            <AiOutlineBars/>
+          </div>
+        ) : (
+          <div className="sign" onClick={()=>handleSignInClick(true)}>Sign In</div>
+        )} 
       </StyledMenu>
+
+      {isSideBarOpen &&
+        <StyledClearModalBack onClick={(e)=>handleModalBackgroundClick('sidebar', e)}>
+          <Sidebar handleSidebarOpen={handleSidebarOpen}/>
+        </StyledClearModalBack>
+      }
 
       {isSignInOpen && 
         <StyledModalBack onClick={(e)=>handleModalBackgroundClick('signIn', e)}>
