@@ -58,7 +58,6 @@ export default function Mypage() {
 
       setIsModify(!isModify);
     }
-
   }
 
   function modifiableInfo(el: string) {
@@ -74,8 +73,6 @@ export default function Mypage() {
   }
 
   async function handleSaveInfo() {
-    handleModifyInfo();
-    console.log(textInput);
     // update
     await APIURL.patch("/account/modifyInfo", {
       id: userInfo.id,
@@ -85,7 +82,11 @@ export default function Mypage() {
       console.log(res.data.data)
       const data = res.data.data;
       dispatch(updateUserInfo(data));
+      handleModifyInfo();
       // token 추가
+    })
+    .catch(err => {
+      console.log(err.response.data.message);
     });
   }
 
