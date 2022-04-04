@@ -29,7 +29,7 @@ export default function Room() {
   useEffect(() => {
     apiCallBack();
 
-    socketClient = io('http://localhost:4000', {
+    socketClient = io(`${process.env.REACT_APP_API_URL}`, {
       withCredentials: true,
     });
 
@@ -65,7 +65,7 @@ export default function Room() {
     });
 
     socketClient.on('receive_msg', msgInfo => {
-      console.log('receive msg', msgInfo);
+      // console.log('receive msg', msgInfo);
       dispatchMsg(msgInfo);
     });
 
@@ -149,7 +149,7 @@ export default function Room() {
     // 떠날때 남은인원이 혼자라면 방도 같이 삭제되어야 함
     if (memberList.length === 1) {
       APIURL.delete(`room/deleteRoom/${roomInfo.id}`)
-      .then(res => console.log(res))
+      .then()
       .catch(err => console.log(err));
     }
 

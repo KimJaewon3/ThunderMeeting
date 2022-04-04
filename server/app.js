@@ -29,7 +29,7 @@ app.use("/members", membersRouter);
 app.use("/chats", chatsRouter);
 
 app.get("/", (req, res) => {
-  res.status(201).send("hello");
+  res.status(201).json({ message: "hello" });
 });
 
 module.exports = app;

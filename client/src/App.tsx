@@ -9,14 +9,14 @@ import Room from './pages/room';
 import Mypage from './pages/mypage';
 import Intro from './pages/intro';
 import axios from 'axios';
-import styled from 'styled-components';
+import ModifyPw from './pages/modifyPw';
 
 export const APIURL = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL_DEV,
   headers: {
     "content-type": "application/json",
     credentials: true,
-  }
+  },
 });
 
 function App() {
@@ -25,12 +25,13 @@ function App() {
       <div>
         <Menu />
         
-        <section className='section'>
+        <section className="section">
           <Routes>
-            <Route path='/' element={<Intro/>} />
+            <Route path="/" element={<Intro/>} />
             <Route path="/main" element={<Main />} />
             <Route path="/room" element={<Room />} />
             <Route path="/mypage" element={<Mypage />} />
+            <Route path="/modifyPw" element={<ModifyPw />} />
           </Routes>
         </section>
         

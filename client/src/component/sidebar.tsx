@@ -1,11 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { GrLogout } from "react-icons/gr";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateAccessToken } from "../modules/token";
 import { isSignIn } from "../modules/sign";
 import { deleteUserInfo } from "../modules/userInfo";
 import styled from "styled-components";
 import { StyledNavLink } from "../App.style";
+import { RootState } from "../modules";
 
 const StyledSidebar = styled.div`
   background-color: #724e00;
@@ -34,6 +35,7 @@ type Props = {
 export default function Sidebar({ handleSidebarOpen }: Props) {
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer);
 
   function handleSignOut() {
     dispatch(updateAccessToken(''));
@@ -45,7 +47,9 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
   
   return (
     <StyledSidebar>
-      <StyledNavLink to={'/mypage'} sidebar={true}>MyPage</StyledNavLink>
+      <p>{userInfo.nick}</p>
+      <StyledNavLink to={'/mypage'} sidebar='true'>MyPage</StyledNavLink>
+      <div>약속 보기</div>
       <div className="sign-out-box">
         <GrLogout/>
         <p onClick={handleSignOut}>Sign Out</p>

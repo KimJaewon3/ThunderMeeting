@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { emailReg, nameReg, nickReg, phoneReg } from "../api/inputValueReg";
 import { APIURL } from "../App";
 import { StyledButton, StyledCommonModal } from "../App.style";
 
@@ -38,13 +39,10 @@ export default function SignUp({ handleSignUpClick }: Props) {
   }, [textInput]);
 
   function verifyInputValue() {
-    const emailReg = new RegExp('^[0-9a-z]+@[0-9a-z]+\\.[a-z]{2,3}$', 'i');
-    const nameReg = new RegExp('^[a-z]*$', 'i');
-    const phoneReg = new RegExp('^[0-9]*$');
-
     if (!(emailReg.test(textInput.email))) return '올바른 email을 입력해주세요';
     if (textInput.password !== textInput.verifyPassword) return '비밀번호 확인을 위해 다시 입력해주세요';
     if (!(nameReg.test(textInput.name))) return '올바른 이름을 입력해주세요';
+    if (!(nickReg.test(textInput.nick))) return '올바른 닉네임을 입력해주세요'
     if (!(phoneReg.test(textInput.phone))) return '올바른 번호를 입력해주세요';
     
     return '';
@@ -64,7 +62,7 @@ export default function SignUp({ handleSignUpClick }: Props) {
     APIURL
       .post('/account/signUp', {...textInput, sex: sex})
       .then(res => {
-        console.log(res);
+        // console.log(res);
         handleSignUpClick(false);
       })
       .catch(err => console.log(err));

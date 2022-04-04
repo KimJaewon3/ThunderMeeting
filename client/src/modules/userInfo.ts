@@ -9,7 +9,7 @@ export type userInfoType = {
   email: string;
   name: string;
   nick: string;
-  mbti: null | string;
+  mbti: string;
   phone: string;
   like: number;
 };
@@ -35,11 +35,12 @@ type UserInfoAction =
 
 // state type
 type UserInfoState = {
+  [key: string]: number | string; 
   id: number;
   email: string;
   name: string;
   nick: string;
-  mbti: null | string;
+  mbti: string;
   phone: string;
   like: number;
 }
@@ -50,7 +51,7 @@ const initialState: UserInfoState = {
   email: '',
   name: '',
   nick: '',
-  mbti: null,
+  mbti: '',
   phone: '',
   like: 0,
 }
