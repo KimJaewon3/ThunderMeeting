@@ -20,19 +20,19 @@ export default function Mypage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   const [ isModify, setIsModify ] = useState(false);
   const [ verifyAlert, setVerifyAlert ] = useState('');
-  const [ textInput, setTextInput ] = useState<TextInput>({
+  const initialTextInput = {
     name: '',
     nick: '',
     mbti: '',
     phone: '',
-  });
+  };
+  const [ textInput, setTextInput ] = useState<TextInput>(initialTextInput);
 
   useEffect(() => {
     setVerifyAlert(verifyInputValue());
   }, [textInput]);
 
   function verifyInputValue() {
-    console.log(textInput)
     if (!(nameReg.test(textInput.name))) return '올바른 이름을 입력해주세요';
     if (!(nickReg.test(textInput.nick))) return '올바른 닉네임을 입력해주세요';
     if (!(phoneReg.test(textInput.phone))) return '올바른 번호를 입력해주세요';
@@ -55,9 +55,10 @@ export default function Mypage() {
         mbti: userInfo.mbti,
         phone: userInfo.phone,
       });
+
+      setIsModify(!isModify);
     }
 
-    setIsModify(!isModify);
   }
 
   function modifiableInfo(el: string) {
@@ -76,7 +77,7 @@ export default function Mypage() {
     handleModifyInfo();
     console.log(textInput);
     // update
-    await APIURL.post("/account/modifyInfo", {
+    await APIURL.patch("/account/modifyInfo", {
       id: userInfo.id,
       ...textInput,
     })
@@ -86,6 +87,11 @@ export default function Mypage() {
       dispatch(updateUserInfo(data));
       // token 추가
     });
+  }
+
+  function handleClickCancel() {
+    setIsModify(false);
+    setTextInput(initialTextInput);
   }
 
   return (
@@ -109,6 +115,7 @@ export default function Mypage() {
         {!isModify && <button onClick={handleModifyInfo}>정보 수정</button>}
         {isModify && <button onClick={handleSaveInfo} disabled={verifyAlert !== ''}>수정 완료</button>}
         <button onClick={()=>{nav('/modifyPw')}}>비밀번호 변경</button>
+        <button onClick={handleClickCancel}>취소</button>
       </div>
     </div>
   );

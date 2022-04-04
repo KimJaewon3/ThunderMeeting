@@ -1,12 +1,18 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { APIURL } from "../App";
+import { RootState } from "../modules";
 
 export default function ModifyPw() {
+  const nav = useNavigate();
   const [ textInput, setTextInput ] = useState({
     oldPw: '',
     newPw: '',
     verifyNewPw: '',
   });
+  const [ resultAlert, setResultAlert ] = useState('');
+  const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   
   function handleTextInput(target: string, e: React.ChangeEvent<HTMLInputElement>) {
     setTextInput({
@@ -15,12 +21,23 @@ export default function ModifyPw() {
     });
   }
 
-  async function handleClickModify() {
-    //await APIURL.post()
+  function handleClickModify() {
+    APIURL.patch('/account/modifyPw', {
+      id: userInfo.id,
+      ...textInput,
+    })
+    .then(res => {
+      alert(res.data.message);
+      gotoMypage();
+    })
+    .catch((err) => {
+      setResultAlert(err.response.data.message);
+    });
+
   }
 
-  function handleClickCancel() {
-    
+  function gotoMypage() {
+    nav('/mypage');
   }
 
   return (
@@ -42,9 +59,11 @@ export default function ModifyPw() {
         </div>
       </div>
 
+      <p>{resultAlert}</p>
+
       <div>
-        <button>변경하기</button>
-        <button>취소</button>
+        <button onClick={handleClickModify}>변경하기</button>
+        <button onClick={gotoMypage}>취소</button>
       </div>
     </div>
     
