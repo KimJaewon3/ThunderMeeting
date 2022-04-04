@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-export const StyledNavLink = styled(NavLink)<{ sidebar?: undefined | true }>`
+export const StyledNavLink = styled(NavLink)<{ sidebar?: undefined | 'true' }>`
   :link, :visited {
     color: ${props => `${props.sidebar ? 'white' : 'black'}`};
     text-decoration: none;

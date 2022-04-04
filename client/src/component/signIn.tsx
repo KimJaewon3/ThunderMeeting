@@ -40,7 +40,7 @@ export default function SignIn({ handleSignInClick, handleSignUpClick }: Props) 
     APIURL
       .post('/account/signIn', textInput)
       .then(res => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         dispatch(updateUserInfo(res.data.data.userInfo));
         dispatch(updateAccessToken(res.data.data.accessToken));
         dispatch(isSignIn(true));
