@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import getGeoLocation from "../api/getGeoLocation";
 import { MapLocation } from "../pages/main";
 
 declare global {
@@ -10,9 +11,10 @@ const { kakao } = window;
 
 type Props = {
   handleSetMapLocation: ({ lat, long, address }: MapLocation) => void;
+  handleSetKakaoMap: (map: any) => void;
 }
 
-export default function KakaoMap({ handleSetMapLocation }: Props) {
+export default function KakaoMap({ handleSetMapLocation, handleSetKakaoMap }: Props) {
   const dummyRoom = [
     {
       id: 1,
@@ -34,7 +36,6 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
     },
   ];
 
-  const [ kakaoMap, setKakaoMap ] = useState({});
   let markers: {marker: any, infowindow: any}[] = [];
   let createRoomMarker: any = null;
 
@@ -47,17 +48,16 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
 
     const map = new kakao.maps.Map(container, options);
     
-    // 우상단에 스카이뷰로 전환하는 컨트롤러 추가
+    // 스카이뷰 전환 컨트롤러
     const mapTypeControl = new kakao.maps.MapTypeControl();
     map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
-    // 우상단에 확대 축소 컨트롤러 추가
+    // 확대 축소 컨트롤러
     const zoomControl = new kakao.maps.ZoomControl();
     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-    // 클릭 리스너 - 방 생성시
+    // 방 생성 시 좌표, 주소 가져오기 이벤트
     kakao.maps.event.addListener(map, 'click', function(mouseEvent: any) {
-      // 주소-좌표 변환 객체를 생성합니다
       const long = mouseEvent.latLng.getLng();
       const lat = mouseEvent.latLng.getLat();
       const geocoder = new kakao.maps.services.Geocoder();
@@ -157,9 +157,7 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
 
     
 
-    setKakaoMap(() => {
-      return map;
-    });
+    return handleSetKakaoMap(map)
   }, []);
   
   // 정보 가져오기
@@ -197,9 +195,10 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
 
 
 
-  function test() {
-    console.log(kakaoMap);
-    console.log(getInfo(kakaoMap));
+  async function test() {
+    // console.log(kakaoMap);
+    // console.log(getInfo(kakaoMap));
+
   }
 
   return (

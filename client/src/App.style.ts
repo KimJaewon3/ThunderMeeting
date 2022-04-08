@@ -17,12 +17,12 @@ export const StyledModalBack = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: 3;
   background-color: rgba(201, 201, 201, 0.5);
 `;
 
 export const StyledCommonModal = styled.div`
-  z-index: 3;
+  z-index: 4;
   background-color: #ffffff;
   border-radius: 10px;
   padding: 5em;

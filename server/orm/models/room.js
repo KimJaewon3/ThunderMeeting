@@ -8,6 +8,9 @@ const room = {
   },
   title: DataTypes.STRING,
   intro: DataTypes.STRING,
+  lat: DataTypes.STRING,
+  long: DataTypes.STRING,
+  address: DataTypes.STRING,
 }
 
-module.exports = room
+module.exports = room;

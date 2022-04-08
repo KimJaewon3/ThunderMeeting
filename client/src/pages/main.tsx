@@ -20,12 +20,12 @@ export default function Main() {
     long: null,
     address: '',
   });
+  const [ kakaoMap, setKakaoMap ] = useState<any>();
 
   const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
   
   useEffect(() => {
-    APIURL
-      .post("/room/roomList")
+    APIURL.post("/room/roomList")
       .then(res => {
         dispatch(updateRoomList(res.data.data));
       });
@@ -35,13 +35,17 @@ export default function Main() {
     setMapLocation({ lat, long, address });
   }
 
+  function handleSetKakaoMap(map: any) {
+    setKakaoMap(map);
+  }
+
   return (
     <div>
       <div>main</div>
 
       <div>
-        <KakaoMap handleSetMapLocation={handleSetMapLocation}></KakaoMap>
-        <CreateRoom mapLocation={mapLocation} />
+        <KakaoMap handleSetMapLocation={handleSetMapLocation} handleSetKakaoMap={handleSetKakaoMap}></KakaoMap>
+        <CreateRoom mapLocation={mapLocation} kakaoMap={kakaoMap}/>
       </div>
 
       <div>

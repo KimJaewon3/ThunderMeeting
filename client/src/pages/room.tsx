@@ -28,7 +28,7 @@ export default function Room() {
   useEffect(() => {
     apiCallBack();
 
-    socketClient = io(`${process.env.REACT_APP_API_URL}`, {
+    socketClient = io(`${process.env.REACT_APP_API_URL_DEV}`, {
       withCredentials: true,
     });
 

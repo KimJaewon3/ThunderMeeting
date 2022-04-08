@@ -7,6 +7,7 @@ import SignUp from "../component/signUp";
 import { RootState } from "../modules";
 import { AiOutlineBars } from 'react-icons/ai';
 import Sidebar from "../component/sidebar";
+import { updateIsSignInModalOpen } from "../modules/modalOpen";
 
 const StyledMenu = styled.nav`
   display: flex;
@@ -25,27 +26,29 @@ const StyledClearModalBack = styled(StyledModalBack)`
 `;
 
 export default function Menu() {
+  const dispatch = useDispatch();
   const [ isSideBarOpen, setIsSideBarOpen ] = useState(false);
-  const [ isSignInOpen, setIsSignInOpen ] = useState(false);
+  // const [ isSignInOpen, setIsSignInOpen ] = useState(false);
   const [ isSignUpOpen, setIsSignUpOpen ] = useState(false);
   const isSignInState = useSelector((state: RootState) => state.signReducer.isSignIn);
+  const isSignInModalOpen = useSelector((state: RootState) => state.modalOpenReducer.isSignInModalOpen);
 
   function handleSidebarOpen(val: boolean) {
     setIsSideBarOpen(val);
-  }
-
-  function handleSignInClick(val: boolean) {
-    setIsSignInOpen(val);
   }
 
   function handleSignUpClick(val: boolean) {
     setIsSignUpOpen(val);
   }
 
+  function handleSignInClick(val: boolean) {
+    dispatch(updateIsSignInModalOpen(val));
+  }
+
   function handleModalBackgroundClick(target: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
       if (target === 'signIn') {
-        setIsSignInOpen(false);
+        handleSignInClick(false);
       }
       if (target === 'signUp') {
         setIsSignUpOpen(false);
@@ -76,7 +79,7 @@ export default function Menu() {
         </StyledClearModalBack>
       }
 
-      {isSignInOpen && 
+      {isSignInModalOpen && 
         <StyledModalBack onClick={(e)=>handleModalBackgroundClick('signIn', e)}>
           <SignIn handleSignInClick={handleSignInClick} handleSignUpClick={handleSignUpClick}/>
         </StyledModalBack>
