@@ -3,12 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { APIURL } from "../App";
 import { StyledModalBack, StyledNavLink } from "../App.style";
 import CreateRoom from "../component/createRoom";
+import KakaoMap from "../component/kakaoMap";
 import { RootState } from "../modules";
 import { updateRoomList } from "../modules/room";
 
+export type MapLocation = {
+  lat: number | null;
+  long: number | null;
+  address: string;
+}
+
 export default function Main() {
   const dispatch = useDispatch();
-  const [ isCreateRoomClicked, setIsCreateRoomClicked ] = useState(false);
+  const [ mapLocation, setMapLocation ] = useState<MapLocation>({
+    lat: null,
+    long: null,
+    address: '',
+  });
 
   const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
   
@@ -20,18 +31,18 @@ export default function Main() {
       });
   }, []);
 
-  function handleCreateRoomModalOpen(val: boolean) {
-    setIsCreateRoomClicked(val);
+  function handleSetMapLocation({ lat, long, address }: MapLocation) {
+    setMapLocation({ lat, long, address });
   }
 
-  function handleModalBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (e.target === e.currentTarget) {
-      setIsCreateRoomClicked(false);
-    }
-  }
   return (
     <div>
       <div>main</div>
+
+      <div>
+        <KakaoMap handleSetMapLocation={handleSetMapLocation}></KakaoMap>
+        <CreateRoom mapLocation={mapLocation} />
+      </div>
 
       <div>
         {roomList.map(room => {
@@ -42,13 +53,7 @@ export default function Main() {
         )})}
       </div>
 
-      <button onClick={()=>handleCreateRoomModalOpen(true)}>방 만들기</button>
-
-      {isCreateRoomClicked && 
-        <StyledModalBack onClick={e=>handleModalBackgroundClick(e)}>
-          <CreateRoom handleCreateRoomModalOpen={handleCreateRoomModalOpen} />
-        </StyledModalBack>
-      }
+       
     </div>
   );
 }

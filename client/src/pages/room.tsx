@@ -12,7 +12,6 @@ type Location = {
   roomInfo: RoomType;
 }
 
-
 let socketClient: Socket;
 
 export default function Room() {
