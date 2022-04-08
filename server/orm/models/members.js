@@ -8,4 +8,4 @@ const members = {
   },
 }
 
-module.exports = members
+module.exports = members;

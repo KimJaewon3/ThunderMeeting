@@ -48,6 +48,7 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
   return (
     <StyledSidebar>
       <p>{userInfo.nick}</p>
+      <p>상메 리덕스로</p>
       <StyledNavLink to={'/mypage'} sidebar='true'>MyPage</StyledNavLink>
       <div>약속 보기</div>
       <div className="sign-out-box">

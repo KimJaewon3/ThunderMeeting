@@ -10,4 +10,4 @@ const chats = {
   createdAt: DataTypes.STRING,
 }
 
-module.exports = chats
+module.exports = chats;

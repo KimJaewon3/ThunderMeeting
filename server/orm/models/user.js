@@ -19,4 +19,4 @@ const user = {
   sex: DataTypes.STRING,
 }
 
-module.exports = user
+module.exports = user;

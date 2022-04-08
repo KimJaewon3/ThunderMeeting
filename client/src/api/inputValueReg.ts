@@ -1,3 +1,5 @@
+// 문자열 검증 정규표현식
+
 export const emailReg = new RegExp('^[0-9a-z]+@[0-9a-z]+\\.[a-z]{2,3}$', 'i');
 export const nameReg = new RegExp('^[a-z]*$', 'i');
 export const phoneReg = new RegExp('^[0-9]*$');

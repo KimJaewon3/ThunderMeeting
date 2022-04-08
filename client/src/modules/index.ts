@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import chatReducer from './chat';
+import modalOpenReducer from './modalOpen';
 import roomReducer from './room';
 import signReducer from './sign';
 import tokenReducer from './token';
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   signReducer,
   roomReducer,
   chatReducer,
-});
+  modalOpenReducer,
+}); 
 
 export const persistedReducer = persistReducer<any, any>(persistConfig, rootReducer);
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;

@@ -12,7 +12,6 @@ type Location = {
   roomInfo: RoomType;
 }
 
-
 let socketClient: Socket;
 
 export default function Room() {
@@ -29,7 +28,7 @@ export default function Room() {
   useEffect(() => {
     apiCallBack();
 
-    socketClient = io(`${process.env.REACT_APP_API_URL}`, {
+    socketClient = io(`${process.env.REACT_APP_API_URL_DEV}`, {
       withCredentials: true,
     });
 

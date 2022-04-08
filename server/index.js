@@ -26,7 +26,8 @@ const server = http.createServer(app);
 webSocket(server);
 
 server.listen(PORT, () => {
-  // dbSync()
+  // 마이그레션 필요시 주석 해제
+  // dbSync();
   console.log(`Server Listening on ${PORT}`);
   // testDBConnection();
 });
