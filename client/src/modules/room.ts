@@ -7,6 +7,9 @@ export type RoomType = {
   id: number;
   title: string;
   intro: string;
+  lat: string;
+  long: string;
+  address: string;
 }
 
 // action function

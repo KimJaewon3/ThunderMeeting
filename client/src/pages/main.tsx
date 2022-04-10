@@ -5,7 +5,7 @@ import { StyledModalBack, StyledNavLink } from "../App.style";
 import CreateRoom from "../component/createRoom";
 import KakaoMap from "../component/kakaoMap";
 import { RootState } from "../modules";
-import { updateRoomList } from "../modules/room";
+import { RoomType, updateRoomList } from "../modules/room";
 
 export type MapLocation = {
   lat: number | null;
@@ -20,23 +20,21 @@ export default function Main() {
     long: null,
     address: '',
   });
-  const [ kakaoMap, setKakaoMap ] = useState<any>();
-
+  const [ areaRoom, setAreaRoom ] = useState<RoomType[]>([]);
+  const [ currentLocation, setCurrentLocation ] = useState();
   const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
   
   useEffect(() => {
     APIURL.post("/room/roomList")
       .then(res => {
         dispatch(updateRoomList(res.data.data));
-      });
+      })
   }, []);
+
+
 
   function handleSetMapLocation({ lat, long, address }: MapLocation) {
     setMapLocation({ lat, long, address });
-  }
-
-  function handleSetKakaoMap(map: any) {
-    setKakaoMap(map);
   }
 
   return (
@@ -44,12 +42,12 @@ export default function Main() {
       <div>main</div>
 
       <div>
-        <KakaoMap handleSetMapLocation={handleSetMapLocation} handleSetKakaoMap={handleSetKakaoMap}></KakaoMap>
-        <CreateRoom mapLocation={mapLocation} kakaoMap={kakaoMap}/>
+        <KakaoMap handleSetMapLocation={handleSetMapLocation}></KakaoMap>
+        <CreateRoom mapLocation={mapLocation} />
       </div>
 
       <div>
-        {roomList.map(room => {
+        {areaRoom.map(room => {
           return (
             <StyledNavLink to='/room' key={room.id} state={{roomInfo: room}}>
               <div>{room.title} / {room.intro} / members: </div>

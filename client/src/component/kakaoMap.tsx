@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
-import getGeoLocation from "../api/getGeoLocation";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import infoWindow from "../api/infoWindow";
+import { RootState } from "../modules";
+import { RoomType } from "../modules/room";
 import { MapLocation } from "../pages/main";
 
 declare global {
@@ -11,33 +14,13 @@ const { kakao } = window;
 
 type Props = {
   handleSetMapLocation: ({ lat, long, address }: MapLocation) => void;
-  handleSetKakaoMap: (map: any) => void;
 }
 
-export default function KakaoMap({ handleSetMapLocation, handleSetKakaoMap }: Props) {
-  const dummyRoom = [
-    {
-      id: 1,
-      title: 'room1',
-      members: [1,2,3],
-      latLng: {
-        lat: 33.450634033553854,
-        lng: 126.56960764239437,
-
-      }
-    },{
-      id: 2,
-      title: 'room2',
-      members: [1,2,3],
-      latLng: {
-        lat: 33.45143989435613,
-        lng: 126.57060916997895,
-      }
-    },
-  ];
-
-  let markers: {marker: any, infowindow: any}[] = [];
+export default function KakaoMap({ handleSetMapLocation }: Props) {
   let createRoomMarker: any = null;
+  const [ kakaoMap, setKakaoMap ] = useState<any>();
+
+  const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -56,7 +39,7 @@ export default function KakaoMap({ handleSetMapLocation, handleSetKakaoMap }: Pr
     const zoomControl = new kakao.maps.ZoomControl();
     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-    // 방 생성 시 좌표, 주소 가져오기 이벤트
+    // 방생서 마커 생성시(클릭) 좌표, 주소 가져오기 이벤트
     kakao.maps.event.addListener(map, 'click', function(mouseEvent: any) {
       const long = mouseEvent.latLng.getLng();
       const lat = mouseEvent.latLng.getLat();
@@ -68,7 +51,7 @@ export default function KakaoMap({ handleSetMapLocation, handleSetKakaoMap }: Pr
             road_address: !!result[0].road_address ? result[0].road_address.address_name : '',
             address: result[0].address.address_name,
           }
-          const addrStr = `도로명: ${detailAddr.road_address} / 지번: ${detailAddr.address}`;
+          const addrStr = detailAddr.address;
           handleSetMapLocation({
             lat: lat,
             long: long,
@@ -100,46 +83,6 @@ export default function KakaoMap({ handleSetMapLocation, handleSetKakaoMap }: Pr
       createRoomMarker.setMap(map);  
     });
 
-    // 드래그 후 이벤트
-    kakao.maps.event.addListener(map, 'dragend', function() {
-      markers.forEach(el => {
-        el.marker.setMap(null);
-        el.infowindow.close();
-      });
-      markers = [];
-
-      dummyRoom.forEach(el => {
-        const position = new kakao.maps.LatLng(el.latLng.lat, el.latLng.lng);
-        // 마커
-        const marker = new kakao.maps.Marker({
-          map: map,
-          position: position,
-          title: el.title
-        });
-        // 인포윈도우
-        const infowindow = new kakao.maps.InfoWindow({
-          position : position, 
-          content : `<div style="padding:5px;">${el.title}<br/>방 입장하기</div>`,
-          removable: true,
-        });
-
-        markers.push({
-          marker,
-          infowindow,
-        });
-
-        console.log(markers)
-
-        marker.setMap(map);
-        infowindow.open(map, marker);
-
-        kakao.maps.event.addListener(marker, 'click', function() {
-          console.log('run')
-          infowindow.open(map, marker);
-        });
-      });
-    });
-
     let iwContent = '<div style="padding:5px;">Hello World!</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
     let iwPosition = new kakao.maps.LatLng(33.450701, 126.570667); //인포윈도우 표시 위치입니다
     let iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
@@ -154,56 +97,90 @@ export default function KakaoMap({ handleSetMapLocation, handleSetKakaoMap }: Pr
       
     // 아래 코드는 인포윈도우를 지도에서 제거합니다
     // infowindow.close();
-
-    
-
-    return handleSetKakaoMap(map)
+    return setKakaoMap(() => map);
   }, []);
-  
-  // 정보 가져오기
-  function getInfo(map: any) {
-    // 지도의 현재 중심좌표를 얻어옵니다 
-    const center = map.getCenter(); 
-    
-    // 지도의 현재 레벨을 얻어옵니다
-    const level = map.getLevel();
-    
-    // 지도타입을 얻어옵니다
-    const mapTypeId = map.getMapTypeId(); 
-    
-    // 지도의 현재 영역을 얻어옵니다 
-    const bounds = map.getBounds();
-    
-    // 영역의 남서쪽 좌표를 얻어옵니다 
-    const swLatLng = bounds.getSouthWest(); 
-    
-    // 영역의 북동쪽 좌표를 얻어옵니다 
-    const neLatLng = bounds.getNorthEast(); 
-    
-    // 영역정보를 문자열로 얻어옵니다. ((남,서), (북,동)) 형식입니다
-    const boundsStr = bounds.toString();
-    
-    let message = '지도 중심좌표는 위도 ' + center.getLat() + ', <br>';
-    message += '경도 ' + center.getLng() + ' 이고 <br>';
-    message += '지도 레벨은 ' + level + ' 입니다 <br> <br>';
-    message += '지도 타입은 ' + mapTypeId + ' 이고 <br> ';
-    message += '지도의 남서쪽 좌표는 ' + swLatLng.getLat() + ', ' + swLatLng.getLng() + ' 이고 <br>';
-    message += '북동쪽 좌표는 ' + neLatLng.getLat() + ', ' + neLatLng.getLng() + ' 입니다';
-    
-    return message;
+
+  // 방 리스트 마커 표시
+  useEffect(() => {
+    if (!kakaoMap) return;
+
+    roomList.forEach((el: RoomType) => {
+      const imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+      const imageSize = new kakao.maps.Size(24, 35); 
+      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+      
+      const marker = new kakao.maps.Marker({
+          map: kakaoMap,
+          position: new kakao.maps.LatLng(el.lat, el.long),
+          title : el.title,
+          image : markerImage, 
+      });
+
+      const overlay = new kakao.maps.CustomOverlay({
+        map: kakaoMap,
+        position: marker.getPosition(),
+        clickable: true,
+      });
+      overlay.setContent(
+        infoWindow(el.title, el.intro, el.address, overlay)
+      );
+      overlay.setMap(null);
+
+      kakao.maps.event.addListener(marker, 'click', function() {
+        overlay.setMap(kakaoMap);
+      });
+    });
+  }, [roomList]);
+
+  // gps
+  function getGeoLocation() {
+    const option = {
+      enableHighAccuracy: false,
+      maximumAge: 1000 * 3600 * 24,
+      timeout: Infinity,
+    };
+
+    return new Promise((resolve, reject) => {
+      return navigator.geolocation.getCurrentPosition(resolve, reject, option);
+    });
   }
 
+  // 내 위치로 이동하기
+  async function goToMyLocation() {
+    if (!kakaoMap) return;
 
+    await getGeoLocation().then((res: any) => {
+      // console.log('내위치',(res.coords));
+      const lat = res.coords.latitude;
+      const long = res.coords.longitude;
+      kakaoMap.panTo(new kakao.maps.LatLng(lat, long));
+    });
+  }
+
+  // 현재 정보 가져오기
+  function getCurrentLocation(map: any) { 
+    const center = map.getCenter(); 
+    const level = map.getLevel();
+    const mapTypeId = map.getMapTypeId();  
+    const bounds = map.getBounds();
+
+    return {
+      center,
+      level,
+      mapTypeId,
+      bounds,
+    };
+  }
 
   async function test() {
     // console.log(kakaoMap);
     // console.log(getInfo(kakaoMap));
-
   }
 
   return (
     <div>
-      <div id="map" style={{ width: "500px", height: "500px" }}>map</div>
+      <div id="map" style={{ width: "500px", height: "500px" }}></div>
+      <button onClick={goToMyLocation}>내 위치로 이동하기</button>
       <button onClick={test}>test map</button>
     </div>
   )
