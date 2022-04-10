@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import getGeoLocation from "../api/getGeoLocation";
 import { APIURL } from "../App";
 import { StyledCommonModal, StyledButton } from "../App.style";
 import { RootState } from "../modules";
@@ -24,9 +23,8 @@ const { kakao } = window;
 
 type Props = {
   mapLocation: MapLocation;
-  kakaoMap: any;
 }
-export default function CreateRoom({ mapLocation, kakaoMap }: Props) {
+export default function CreateRoom({ mapLocation }: Props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [ textInput, setTextInput ] = useState({
@@ -85,16 +83,7 @@ export default function CreateRoom({ mapLocation, kakaoMap }: Props) {
       });
   }
 
-  // 내 위치로 이동하기
-  async function getMyLocation() {
-    await getGeoLocation()
-      .then((res: any) => {
-        console.log(res.coords)
-        const lat = res.coords.latitude;
-        const long = res.coords.longitude;
-        kakaoMap.panTo(new kakao.maps.LatLng(lat, long));
-      });
-  }
+  
   
   return (
     <div>
@@ -110,7 +99,6 @@ export default function CreateRoom({ mapLocation, kakaoMap }: Props) {
 
       <div>
         <p>약속 위치<span>(지도에서 원하는 위치를 클릭해주세요)</span></p>
-        <button onClick={getMyLocation}>내 위치로 이동하기</button>
         <div>{mapLocation.address}</div>
       </div>
       
