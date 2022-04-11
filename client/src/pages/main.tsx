@@ -31,7 +31,9 @@ export default function Main() {
       })
   }, []);
 
-
+  function handleSetAreaRoom(rooms: RoomType[]) {
+    setAreaRoom(rooms);
+  }
 
   function handleSetMapLocation({ lat, long, address }: MapLocation) {
     setMapLocation({ lat, long, address });
@@ -42,7 +44,7 @@ export default function Main() {
       <div>main</div>
 
       <div>
-        <KakaoMap handleSetMapLocation={handleSetMapLocation}></KakaoMap>
+        <KakaoMap handleSetMapLocation={handleSetMapLocation} handleSetAreaRoom={handleSetAreaRoom}></KakaoMap>
         <CreateRoom mapLocation={mapLocation} />
       </div>
 

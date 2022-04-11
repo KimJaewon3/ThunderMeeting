@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { AnyIfEmpty, useSelector } from "react-redux";
 import infoWindow from "../api/infoWindow";
 import { RootState } from "../modules";
 import { RoomType } from "../modules/room";
@@ -14,9 +14,10 @@ const { kakao } = window;
 
 type Props = {
   handleSetMapLocation: ({ lat, long, address }: MapLocation) => void;
+  handleSetAreaRoom: (rooms: RoomType[]) => void;
 }
 
-export default function KakaoMap({ handleSetMapLocation }: Props) {
+export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Props) {
   let createRoomMarker: any = null;
   const [ kakaoMap, setKakaoMap ] = useState<any>();
 
@@ -39,11 +40,18 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
     const zoomControl = new kakao.maps.ZoomControl();
     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-    // 방생서 마커 생성시(클릭) 좌표, 주소 가져오기 이벤트
+    // 드래그 후 범위내 방 리스트 갱신
+    kakao.maps.event.addListener(map, 'dragend', function() {
+      findRoomsInArea(map);
+    });
+
+    // 방생성 마커 생성시(클릭) 좌표, 주소 가져오기 이벤트
     kakao.maps.event.addListener(map, 'click', function(mouseEvent: any) {
       const long = mouseEvent.latLng.getLng();
       const lat = mouseEvent.latLng.getLat();
       const geocoder = new kakao.maps.services.Geocoder();
+
+      console.log(lat, long)
 
       geocoder.coord2Address(long, lat, (result: any, status: any) => {
         if (status === kakao.maps.services.Status.OK) {
@@ -83,20 +91,6 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
       createRoomMarker.setMap(map);  
     });
 
-    let iwContent = '<div style="padding:5px;">Hello World!</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-    let iwPosition = new kakao.maps.LatLng(33.450701, 126.570667); //인포윈도우 표시 위치입니다
-    let iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-    // 인포윈도우를 생성하고 지도에 표시합니다
-    let infowindow = new kakao.maps.InfoWindow({
-      map: map, // 인포윈도우가 표시될 지도
-      position : iwPosition, 
-      content : iwContent,
-      removable : iwRemoveable
-    });
-      
-    // 아래 코드는 인포윈도우를 지도에서 제거합니다
-    // infowindow.close();
     return setKakaoMap(() => map);
   }, []);
 
@@ -129,6 +123,8 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
       kakao.maps.event.addListener(marker, 'click', function() {
         overlay.setMap(kakaoMap);
       });
+
+      findRoomsInArea(kakaoMap);
     });
   }, [roomList]);
 
@@ -155,21 +151,25 @@ export default function KakaoMap({ handleSetMapLocation }: Props) {
       const long = res.coords.longitude;
       kakaoMap.panTo(new kakao.maps.LatLng(lat, long));
     });
+
+    findRoomsInArea(kakaoMap);
   }
 
-  // 현재 정보 가져오기
-  function getCurrentLocation(map: any) { 
-    const center = map.getCenter(); 
-    const level = map.getLevel();
-    const mapTypeId = map.getMapTypeId();  
+  // 지도 크기내 방 리스트
+  function findRoomsInArea(map: any) {
     const bounds = map.getBounds();
+    const swLat = bounds.getSouthWest().getLat();
+    const swLng = bounds.getSouthWest().getLng();
+    const neLat = bounds.getNorthEast().getLat();
+    const neLng = bounds.getNorthEast().getLng();
 
-    return {
-      center,
-      level,
-      mapTypeId,
-      bounds,
-    };
+    const rooms = roomList.filter(el => {
+      const roomLat = Number(el.lat);
+      const roomLng = Number(el.long);
+      return (roomLat > swLat && roomLat < neLat && roomLng > swLng && roomLng < neLng);
+    });
+
+    handleSetAreaRoom(rooms);
   }
 
   async function test() {
