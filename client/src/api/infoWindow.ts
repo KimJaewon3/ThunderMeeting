@@ -1,7 +1,8 @@
+import { RoomType } from "../modules/room";
 import "./infoWindow.css";
 
 // 커스텀 오버레이 인포윈도우
-export default function infoWindow(title: string, intro: string, address: string, overlay: any) {
+export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: any) {
   const wrapDiv = document.createElement('div');
   wrapDiv.className = "wrap";
 
@@ -10,18 +11,7 @@ export default function infoWindow(title: string, intro: string, address: string
 
   const titleDiv = document.createElement('div');
   titleDiv.className = "title";
-  titleDiv.innerHTML = title;
-
-  const bodyDiv = document.createElement('div');
-  bodyDiv.className = "body";
-  bodyDiv.innerHTML = `
-    <div>
-      <div>모집글: ${intro}</div>
-    </div> 
-    <div>
-      <div>${address}</div>
-    </div>
-  `;
+  titleDiv.innerHTML = roomInfo.title;
 
   const closeDiv = document.createElement('div');
   closeDiv.className = "close";
@@ -30,20 +20,38 @@ export default function infoWindow(title: string, intro: string, address: string
     overlay.setMap(null);
   };
 
+  const bodyDiv = document.createElement('div');
+  bodyDiv.className = "body";
+  bodyDiv.innerHTML = `
+    <div>
+      <div>모집글: ${roomInfo.intro}</div>
+    </div> 
+    <div>
+      <div>${roomInfo.address}</div>
+    </div>
+  `;
+
+  const linkDiv = document.createElement('div');
+  linkDiv.innerHTML = '입장하기';
+
   titleDiv.appendChild(closeDiv);
   infoDiv.appendChild(titleDiv);
+  bodyDiv.appendChild(linkDiv);
   infoDiv.appendChild(bodyDiv);
   wrapDiv.appendChild(infoDiv);
 
   wrapDiv.addEventListener('mouseenter', () => {
     overlay.setZIndex(999);
-    //console.log(overlay.getZIndex());
-  })
+  });
 
   wrapDiv.addEventListener('mouseleave', () => {
     overlay.setZIndex(0);
-    //console.log(overlay.getZIndex());
-  })
+  });
 
+  linkDiv.addEventListener('click', () => {
+    console.log(1);
+    navToRoom(roomInfo);
+  })
+  
   return wrapDiv;
 }
