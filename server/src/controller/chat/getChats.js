@@ -12,7 +12,7 @@ async function getChats(req, res) {
       include: [User, Room]
     });
 
-    console.log(chatResult);
+    // console.log(chatResult);
 
 
     return res.status(200).json({ message: 'chat log', data: chatResult });
