@@ -3,4 +3,5 @@ module.exports = {
   signIn: require("./signIn"),
   modifyInfo: require("./modifyInfo"),
   modifyPw: require("./modifyPw"),
+  createSangme: require('./createSangme')
 }

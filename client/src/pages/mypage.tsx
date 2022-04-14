@@ -81,6 +81,7 @@ export default function Mypage() {
     .then(res => {
       console.log(res.data.data)
       const data = res.data.data;
+      // bug
       dispatch(updateUserInfo(data));
       handleModifyInfo();
       // token 추가
@@ -100,7 +101,7 @@ export default function Mypage() {
       <div>
         {Object.keys(userInfo).map((el, idx) => {
           if (el === 'id') return;
-
+          console.log('update')
           return (
             <div key={idx}>
               <p>{el}</p>

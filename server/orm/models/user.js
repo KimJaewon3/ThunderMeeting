@@ -17,6 +17,10 @@ const user = {
   phone: DataTypes.STRING,
   like: DataTypes.INTEGER,
   sex: DataTypes.STRING,
+  sangme: {
+    type: DataTypes.STRING,
+    defaultValue: "",
+  }
 }
 
 module.exports = user;

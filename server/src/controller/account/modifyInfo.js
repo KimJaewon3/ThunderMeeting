@@ -1,6 +1,5 @@
 const { User } = require("../../../orm");
 
-
 async function modifyInfo(req, res) {
   try {
     const { id, name, nick, mbti, phone } = req.body;

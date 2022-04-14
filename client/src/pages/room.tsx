@@ -157,6 +157,7 @@ export default function Room() {
       userId: userInfo.id,
       roomId: roomInfo.id,
     });
+
     navigate('/main');
   }
 
