@@ -19,6 +19,7 @@ type Props = {
 }
 
 export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Props) {
+  const nav = useNavigate();
   const [ kakaoMap, setKakaoMap ] = useState<any>();
   const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
 
@@ -163,7 +164,6 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
     handleSetAreaRoom(rooms);
   }
 
-  const nav = useNavigate();
   function navToRoom(room: RoomType) {
     nav('/room', {state: {roomInfo: room}});
   }

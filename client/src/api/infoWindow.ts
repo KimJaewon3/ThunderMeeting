@@ -51,7 +51,7 @@ export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: 
   linkDiv.addEventListener('click', () => {
     console.log(1);
     navToRoom(roomInfo);
-  })
+  });
   
   return wrapDiv;
 }

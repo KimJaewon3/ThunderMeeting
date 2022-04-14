@@ -57,8 +57,6 @@ export default function SignUp({ handleSignUpClick }: Props) {
   }
 
   function signUpBtnHandler() {
-    // api요청 /SignUp
-
     APIURL
       .post('/account/signUp', {...textInput, sex: sex})
       .then(res => {

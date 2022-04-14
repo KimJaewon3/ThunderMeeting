@@ -3,6 +3,7 @@
 // action type
 const UPDATE_USER_INFO = 'userInfo/UPDATE_USER_INFO' as const;
 const DELETE_USER_INFO = 'userInfo/DELETE_USER_INFO' as const;
+const UPDATE_SANGME = 'userInfo/UPDATE_SANGME' as const;
 
 export type userInfoType = {
   id: number;
@@ -12,6 +13,7 @@ export type userInfoType = {
   mbti: string;
   phone: string;
   like: number;
+  sangme: string;
 };
 
 // action function
@@ -28,10 +30,18 @@ export const deleteUserInfo = () => {
   }
 }
 
+export const updateSangme = (sangme: string) => {
+  return {
+    type: UPDATE_SANGME,
+    payload: sangme,
+  }
+}
+
 // action type
 type UserInfoAction = 
   |ReturnType<typeof updateUserInfo>
   |ReturnType<typeof deleteUserInfo>
+  |ReturnType<typeof updateSangme>
 
 // state type
 type UserInfoState = {
@@ -43,6 +53,7 @@ type UserInfoState = {
   mbti: string;
   phone: string;
   like: number;
+  sangme: string;
 }
 
 // state
@@ -54,6 +65,7 @@ const initialState: UserInfoState = {
   mbti: '',
   phone: '',
   like: 0,
+  sangme: '',
 }
 
 // reducer
@@ -65,7 +77,9 @@ function userInfoReducer(
     case UPDATE_USER_INFO: 
       return Object.assign({}, action.payload);
     case DELETE_USER_INFO:
-      return initialState
+      return initialState;
+    case UPDATE_SANGME:
+      return Object.assign({}, state, { sangme: action.payload });
     default:
       return state;
   }
