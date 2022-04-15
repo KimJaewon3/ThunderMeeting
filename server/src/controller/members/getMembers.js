@@ -9,7 +9,18 @@ async function getMembers(req, res) {
         roomId: roomId,
       },
       order: sequelize.col('createdAt'),
-      include: [User]
+      include: [
+        { 
+          model: User,
+          attributes: {
+            exclude: [
+              'createdAt',
+              'updatedAt',
+              'password',
+            ]
+          }
+        }
+      ],
     })
 
     return res.status(200).json({ message: 'get members', data: membersResult });

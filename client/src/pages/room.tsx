@@ -7,6 +7,8 @@ import { RoomType } from "../modules/room";
 import { io, Socket } from "socket.io-client";
 import { ChatType, updateChat } from "../modules/chat";
 import Chat from "../component/chat";
+import MemberInfoOverlay from "../component/memberInfoOverlay";
+import { userInfoType } from "../modules/userInfo";
 
 type Location = {
   roomInfo: RoomType;
@@ -19,7 +21,7 @@ export default function Room() {
   const location = useLocation();
   const locationState = location.state as Location;
   const roomInfo = locationState.roomInfo;
-  const [ memberList, setMemberList ] = useState<any[]>([]);
+  const [ memberList, setMemberList ] = useState<userInfoType[]>([]);
   const [ chats, setChats ] = useState<ChatType[]>([]);
   const [ adminNoti, setAdminNoti ] = useState('');
 
@@ -161,6 +163,20 @@ export default function Room() {
     navigate('/main');
   }
 
+  const [ isMemberInfoOpen, setIsMemberInfoOpen ] = useState(false);
+  const [ pos, setPos ] = useState({ xpos: 0, ypos: 0 });
+  const [ memberInfo, setMemberInfo ] = useState<userInfoType>();
+
+  function showMemberInfo(e: React.MouseEvent<HTMLDivElement, MouseEvent>, el: userInfoType) {
+    setIsMemberInfoOpen(true);
+    setPos({ xpos: e.clientX, ypos: e.clientY });
+    setMemberInfo(el);
+  }
+  
+  function closeMemberInfo(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    setIsMemberInfoOpen(false);
+  }
+
   return (
     <div>
       <div>room</div>
@@ -174,12 +190,12 @@ export default function Room() {
 
       <div>
         {memberList.map((el, idx) => {
-          // console.log(memberList)
           return (
             <div key={idx}>
-              <div>{el.nick}</div>
+              <div onMouseOver={e=>showMemberInfo(e, el)} onMouseLeave={e=>closeMemberInfo(e)}>{el.nick}</div>
             </div>
         )})}
+        {isMemberInfoOpen && <MemberInfoOverlay xpos={pos.xpos} ypos={pos.ypos} info={memberInfo} />}
       </div>
 
       <hr/>
