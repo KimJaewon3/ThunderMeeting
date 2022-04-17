@@ -7,6 +7,7 @@ import { StyledCommonModal, StyledButton } from "../App.style";
 import { RootState } from "../modules";
 import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import { MapLocation } from "../pages/main";
+import ConfirmMeeting from "./confirmMeeting";
 
 const StyledModal = styled(StyledCommonModal)`
   .btn-box {
@@ -24,6 +25,7 @@ const { kakao } = window;
 type Props = {
   mapLocation: MapLocation;
 }
+
 export default function CreateRoom({ mapLocation }: Props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,7 +33,10 @@ export default function CreateRoom({ mapLocation }: Props) {
     title: '',
     intro: '',
   });
+  const [ datetime, setDatetime ] = useState('');
+  const [ isDatetimeOpen, setIsDatetimeOpen ] = useState(false);
   const [ alertText, setAlertText ] = useState('');
+  const [ datatimeVerify, setDatatimeVerify ] = useState(false);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
 
   function handleTextInput(target: 'title' | 'intro', e: React.ChangeEvent<HTMLInputElement>) {
@@ -43,7 +48,7 @@ export default function CreateRoom({ mapLocation }: Props) {
 
   function verifyAlert() {
     if (textInput.title.length === 0) {
-      return '제목을 입력하세요';
+      return '제목을 입력해주요';
     }
     if (textInput.intro.length === 0) {
       return '간단한 소개글을 입력해주세요';
@@ -51,15 +56,21 @@ export default function CreateRoom({ mapLocation }: Props) {
     if (!mapLocation.long || !mapLocation.lat || mapLocation.address === '') {
       return '약속장소를 정해주세요';
     }
+    if (datetime === '') {
+      return '약속 시간을 설정해 주세요';
+    }
+    if (!datatimeVerify) {
+      return '아직 과거로의 여행은 구현하지 못했어요... 다시 선택해주세요';
+    }
     return '';
   }
 
   function handleCreateBtnClick() {
     // 검증 함수
     if (userInfo.id === 0) {
-      // 로그인창 오픈
       return dispatch(updateIsSignInModalOpen(true));
     }
+
     const alert = verifyAlert();
     setAlertText(alert);
     if (alert !== '') return;
@@ -68,6 +79,7 @@ export default function CreateRoom({ mapLocation }: Props) {
       .post('room/createRoom', {
         ...textInput,
         ...mapLocation,
+        datetime,
       })
       .then(res => {
         console.log(res.data.data)
@@ -83,7 +95,17 @@ export default function CreateRoom({ mapLocation }: Props) {
       });
   }
 
-  
+  function handleSetDatetime(datetimestr: string) {
+    setDatetime(datetimestr);
+  }
+
+  function handleSetIsDatetimeOpen(val: boolean) {
+    setIsDatetimeOpen(val);
+  }
+
+  function handleSetDatatimeVerify(val: boolean) {
+    setDatatimeVerify(val);
+  }
   
   return (
     <div>
@@ -100,6 +122,17 @@ export default function CreateRoom({ mapLocation }: Props) {
       <div>
         <p>약속 위치<span>(지도에서 원하는 위치를 클릭해주세요)</span></p>
         <div>{mapLocation.address}</div>
+      </div>
+
+      <div>
+        <p>{datetime}</p>
+        <button onClick={()=>handleSetIsDatetimeOpen(!isDatetimeOpen)}>
+          {isDatetimeOpen ? '확인' : '약속 시간 정하기'}
+        </button>
+        {isDatetimeOpen && <ConfirmMeeting 
+          handleSetDatetime={handleSetDatetime} 
+          handleSetDatatimeVerify={handleSetDatatimeVerify}
+        />}
       </div>
       
       <div>

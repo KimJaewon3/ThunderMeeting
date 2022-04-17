@@ -9,6 +9,7 @@ import { ChatType, updateChat } from "../modules/chat";
 import Chat from "../component/chat";
 import MemberInfoOverlay from "../component/memberInfoOverlay";
 import { userInfoType } from "../modules/userInfo";
+import ConfirmMeeting from "../component/confirmMeeting";
 
 type Location = {
   roomInfo: RoomType;
@@ -183,9 +184,11 @@ export default function Room() {
 
       <div>{roomInfo.title}</div>
       <div>{roomInfo.intro}</div>
-
       <hr/>
 
+      {/*<ConfirmMeeting roomInfo={roomInfo}/>*/}
+
+      <hr/>
       <div>{adminNoti}</div>
 
       <div>

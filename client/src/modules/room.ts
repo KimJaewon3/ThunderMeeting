@@ -10,6 +10,7 @@ export type RoomType = {
   lat: string;
   long: string;
   address: string;
+  datetime: string;
 }
 
 // action function

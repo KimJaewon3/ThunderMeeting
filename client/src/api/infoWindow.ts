@@ -27,7 +27,10 @@ export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: 
       <div>모집글: ${roomInfo.intro}</div>
     </div> 
     <div>
-      <div>${roomInfo.address}</div>
+      <div>장소: ${roomInfo.address}</div>
+    </div>
+    <div>
+      <div>시간: ${roomInfo.datetime}</div>
     </div>
   `;
 
