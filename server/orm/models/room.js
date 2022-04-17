@@ -11,6 +11,7 @@ const room = {
   lat: DataTypes.STRING,
   long: DataTypes.STRING,
   address: DataTypes.STRING,
+  datetime: DataTypes.STRING,
 }
 
 module.exports = room;

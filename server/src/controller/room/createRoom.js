@@ -2,7 +2,8 @@ const { Room } = require("../../../orm");
 
 async function createRoom(req, res) {
   try {
-    const { title, intro, lat, long, address } = req.body;
+    console.log(req.body)
+    const { title, intro, lat, long, address, datetime } = req.body;
 
     const createResult = await Room.create({
       title: title,
@@ -10,6 +11,7 @@ async function createRoom(req, res) {
       lat: String(lat),
       long: String(long),
       address: address,
+      datetime: datetime,
     });
 
     return res.status(200).json({ message: '방을 생성했습니다', data: createResult });
