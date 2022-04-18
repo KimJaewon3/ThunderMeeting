@@ -11,6 +11,7 @@ export type RoomType = {
   long: string;
   address: string;
   datetime: string;
+  confirm: 'Y' | 'N';
 }
 
 // action function
