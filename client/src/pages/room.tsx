@@ -123,11 +123,8 @@ export default function Room() {
   }
 
   async function sendMsg(msgInfo: ChatType) {
-    // console.log('send msg', msgInfo)
-    // emit
     socketClient.emit('send_msg', { roomId: roomInfo.id, msgInfo: msgInfo });
     
-    // db
     await APIURL.post('chats/createChats', {
       content: msgInfo.msg,
       createdAt: msgInfo.createdAt,
@@ -136,11 +133,9 @@ export default function Room() {
     })
     .then(res=> {
       // console.log(res);
+      dispatchMsg(msgInfo);
     })
     .catch(err => console.log(err));
-
-    // state - broadcast라서 수동 갱신
-    dispatchMsg(msgInfo);
   }
 
   function dispatchMsg(msgInfo: ChatType) {
@@ -178,6 +173,15 @@ export default function Room() {
     setIsMemberInfoOpen(false);
   }
 
+  function handleConfirmBtnClick() {
+    console.log(memberList, roomInfo);
+    APIURL.patch("/room/confirmMeeting", {
+      roomId: roomInfo.id,
+    }).then(res => {
+      console.log(res);
+    }).catch(err => console.log(err));
+  }
+
   return (
     <div>
       <div>room</div>
@@ -205,7 +209,10 @@ export default function Room() {
 
       <Chat sendMsg={sendMsg} chats={chats} ></Chat>
 
-      <div onClick={leaveRoom}>방 나가기</div>
+      <div>
+        <button onClick={handleConfirmBtnClick}>약속 잡기</button>
+        <button onClick={leaveRoom}>방 나가기</button>
+      </div>    
     </div>
   );
 }

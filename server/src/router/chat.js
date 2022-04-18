@@ -1,6 +1,4 @@
 const { chatsController } = require("../controller");
-
-
 const router = require("express").Router();
 
 router.post("/createChats", chatsController.createChats);
