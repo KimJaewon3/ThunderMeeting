@@ -70,6 +70,11 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
   function handleTextInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setTextInput(e.target.value);
   }
+
+  function goToIntro() {
+    handleSidebarOpen(false);
+    nav('/');
+  }
   
   return (
     <StyledSidebar>
@@ -86,7 +91,7 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
         <BsPencil onClick={writeSangme}/>
       </div>
       <StyledNavLink to={'/mypage'} sidebar='true'>MyPage</StyledNavLink>
-      <div>약속 보기</div>
+      <div onClick={goToIntro}>약속 보기</div>
       <div className="sign-out-box">
         <GrLogout/>
         <p onClick={handleSignOut}>Sign Out</p>

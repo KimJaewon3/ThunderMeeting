@@ -38,6 +38,7 @@ export default function CreateRoom({ mapLocation }: Props) {
   const [ alertText, setAlertText ] = useState('');
   const [ datatimeVerify, setDatatimeVerify ] = useState(false);
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  const isSignIn = useSelector((state: RootState) => state.signReducer.isSignIn);
 
   function handleTextInput(target: 'title' | 'intro', e: React.ChangeEvent<HTMLInputElement>) {
     setTextInput({
@@ -67,7 +68,7 @@ export default function CreateRoom({ mapLocation }: Props) {
 
   function handleCreateBtnClick() {
     // 검증 함수
-    if (userInfo.id === 0) {
+    if (!isSignIn) {
       return dispatch(updateIsSignInModalOpen(true));
     }
 
