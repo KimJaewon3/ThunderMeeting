@@ -2,13 +2,14 @@ const { User } = require("../../../orm");
 
 async function modifyInfo(req, res) {
   try {
-    const { id, name, nick, mbti, phone } = req.body;
+    const { id, name, nick, mbti, phone, sangme } = req.body;
 
     const modifyResult = await User.update({
       name: name,
       nick: nick,
       mbti: mbti,
       phone: phone,
+      sangme: sangme,
     }, {
       where: {
         id: id,

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { APIURL } from "../App";
 import { StyledCommonModal, StyledButton } from "../App.style";
@@ -34,8 +35,6 @@ export default function SignIn({ handleSignInClick, handleSignUpClick }: Props) 
   }
 
   function signInBtnHandler() {
-
-
     // 로그인 요청
     APIURL
       .post('/account/signIn', textInput)

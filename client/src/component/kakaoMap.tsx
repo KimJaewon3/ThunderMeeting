@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { AnyIfEmpty, useSelector } from "react-redux";
+import { AnyIfEmpty, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import infoWindow from "../api/infoWindow";
 import { RootState } from "../modules";
+import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import { RoomType } from "../modules/room";
 import { MapLocation } from "../pages/main";
 
@@ -19,6 +20,7 @@ type Props = {
 }
 
 export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Props) {
+  const dispatch = useDispatch();
   const nav = useNavigate();
   const [ kakaoMap, setKakaoMap ] = useState<any>();
   const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
@@ -164,8 +166,12 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
     handleSetAreaRoom(rooms);
   }
 
-  function navToRoom(room: RoomType) {
-    nav('/room', {state: {roomInfo: room}});
+  function navToRoom(room: RoomType, isSignIn: boolean) {
+    if (!isSignIn) {
+      dispatch(updateIsSignInModalOpen(true));
+    } else {
+      nav('/room', {state: {roomInfo: room}});
+    }
   }
 
   return (

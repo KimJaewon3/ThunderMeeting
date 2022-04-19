@@ -25,6 +25,7 @@ export default function Mypage() {
     nick: '',
     mbti: '',
     phone: '',
+    sangme: '',
   };
   const [ textInput, setTextInput ] = useState<TextInput>(initialTextInput);
 
@@ -54,6 +55,7 @@ export default function Mypage() {
         nick: userInfo.nick,
         mbti: userInfo.mbti,
         phone: userInfo.phone,
+        sangme: userInfo.sangme,
       });
 
       setIsModify(!isModify);
@@ -83,7 +85,8 @@ export default function Mypage() {
       const data = res.data.data;
       // bug
       dispatch(updateUserInfo(data));
-      handleModifyInfo();
+      // handleModifyInfo();
+      setIsModify(false);
       // token 추가
     })
     .catch(err => {
@@ -101,7 +104,6 @@ export default function Mypage() {
       <div>
         {Object.keys(userInfo).map((el, idx) => {
           if (el === 'id') return;
-          console.log('update')
           return (
             <div key={idx}>
               <p>{el}</p>

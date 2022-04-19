@@ -9,13 +9,14 @@ import { RoomType } from "../modules/room";
 export default function Intro() {
   const nav = useNavigate();
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  const isSignIn = useSelector((state: RootState) => state.signReducer);
   const [ joinedRoomList, setJoinedRoomList ] = useState<RoomType[]>([]);
 
   useEffect(() => {
     APIURL.get(`room/getMeetingList/${userInfo.id}`).then(res => {
       setJoinedRoomList(joinedRoomList => res.data.data);
     }).catch(err => console.log(err));
-  }, []);
+  }, [isSignIn]);
 
   function renderRoomLi(el: RoomType) {
     return (
@@ -37,19 +38,26 @@ export default function Intro() {
       <div>
         <div>약속</div>
         <ul>
-        {joinedRoomList.map(el => {
-          if (el.confirm === 'N') return;
-          return renderRoomLi(el);
-        })}
+        {joinedRoomList.filter(el => el.confirm !== 'N').length === 0 ? (
+          <li>아직 약속이 없어요...</li>
+        ) : (
+          joinedRoomList.filter(el => el.confirm !== 'N').map(el => {
+            return renderRoomLi(el);
+          })
+        )}
         </ul>
       </div>
       
       <div>
         <div>참여중인 방</div>
         <ul>
-        {joinedRoomList.map(el => {
-          return renderRoomLi(el);
-        })}
+        {joinedRoomList.length === 0 ? (
+          <li>아직 참여중인 방이 없어요...</li>
+        ) : (
+          joinedRoomList.map(el => {
+            return renderRoomLi(el);
+          })
+        )}
         </ul>
       </div>
 

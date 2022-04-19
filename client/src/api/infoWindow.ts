@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { RootState } from "../modules";
 import { RoomType } from "../modules/room";
 import "./infoWindow.css";
 
@@ -52,8 +54,11 @@ export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: 
   });
 
   linkDiv.addEventListener('click', () => {
-    console.log(1);
-    navToRoom(roomInfo);
+    const state = localStorage.getItem('persist:root');
+    if (typeof state === 'string') {
+      const isSignIn = JSON.parse(JSON.parse(state).signReducer).isSignIn;
+      navToRoom(roomInfo, isSignIn);
+    }
   });
   
   return wrapDiv;
