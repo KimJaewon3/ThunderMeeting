@@ -65,6 +65,11 @@ function webSocket(server) {
       console.log(roomId, msgInfo);
       socket.broadcast.to(roomId).emit('receive_msg', msgInfo);
     });
+
+    socket.on('send_confirm_meeting', (roomInfo) => {
+      console.log(roomInfo)
+      socket.broadcast.to(roomInfo.id).emit('alert_confirm_meeting', roomInfo);
+    });
   });
 }
 
