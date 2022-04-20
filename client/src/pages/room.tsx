@@ -21,10 +21,12 @@ export default function Room() {
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as Location;
-  const roomInfo = locationState.roomInfo;
+  const roomInfoState = locationState.roomInfo;
+  const [ roomInfo, setRoomInfo ] = useState(roomInfoState);
   const [ memberList, setMemberList ] = useState<userInfoType[]>([]);
   const [ chats, setChats ] = useState<ChatType[]>([]);
   const [ adminNoti, setAdminNoti ] = useState('');
+
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   
@@ -70,6 +72,10 @@ export default function Room() {
       // console.log('receive msg', msgInfo);
       dispatchMsg(msgInfo);
     });
+
+    socketClient.on('alert_confirm_meeting', data => {
+      setRoomInfo(roomInfo => data);
+    })
 
     return () => {
       socketClient.disconnect();
@@ -179,18 +185,25 @@ export default function Room() {
       roomId: roomInfo.id,
     }).then(res => {
       console.log(res);
+      socketClient.emit('send_confirm_meeting', res.data.data);
+      setRoomInfo(res.data.data);
     }).catch(err => console.log(err));
   }
 
   return (
     <div>
-      <div>room</div>
+      {roomInfo.confirm === 'Y' && 
+        <div>
+          <p>{roomInfo.address}</p>
+          <p>{roomInfo.datetime}</p>
+          <p>약속 확정 !!!</p>
+        </div>
+      }
 
       <div>{roomInfo.title}</div>
       <div>{roomInfo.intro}</div>
       <hr/>
-
-      {/*<ConfirmMeeting roomInfo={roomInfo}/>*/}
+      
 
       <hr/>
       <div>{adminNoti}</div>
@@ -205,12 +218,14 @@ export default function Room() {
         {isMemberInfoOpen && <MemberInfoOverlay xpos={pos.xpos} ypos={pos.ypos} info={memberInfo} />}
       </div>
 
+      <hr />
+      {memberList[0]?.id === userInfo.id  && roomInfo.confirm === 'N' && <button onClick={handleConfirmBtnClick}>약속 잡기</button>}
+
       <hr/>
 
       <Chat sendMsg={sendMsg} chats={chats} ></Chat>
 
       <div>
-        <button onClick={handleConfirmBtnClick}>약속 잡기</button>
         <button onClick={leaveRoom}>방 나가기</button>
       </div>    
     </div>
