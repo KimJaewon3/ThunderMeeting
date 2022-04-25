@@ -31,7 +31,10 @@ export default function SignUp({ handleSignUpClick }: Props) {
     mbti: '',
     phone: '',
   });
-  const [ sex, setSex ] = useState<'f' | 'm'>('m');
+  const [ sex, setSex ] = useState({
+    m: false,
+    f: false,
+  });
   const [ verifyAlert, setVerifyAlert ] = useState('');
 
   useEffect(() => {
@@ -49,7 +52,6 @@ export default function SignUp({ handleSignUpClick }: Props) {
   }
 
   function textInputHandler(target: string, e: React.ChangeEvent<HTMLInputElement>) {
-    //console.log(e.nativeEvent.text)
     setTextInput({
       ...textInput,
       [target]: e.target.value,
@@ -57,13 +59,35 @@ export default function SignUp({ handleSignUpClick }: Props) {
   }
 
   function signUpBtnHandler() {
+    if (!sex.m && !sex.f) {
+      return setVerifyAlert('성별을 선택해주세요');
+    }
+
     APIURL
-      .post('/account/signUp', {...textInput, sex: sex})
+      .post('/account/signUp', {
+        ...textInput,
+        sex: sex.m ? 'm' : 'f'
+      })
       .then(res => {
-        // console.log(res);
         handleSignUpClick(false);
       })
       .catch(err => console.log(err));
+  }
+
+  function handleSexChoice(target: 'f' | 'm') {
+    if (target === 'f') {
+      setSex({
+        'm': false,
+        [target]: true
+      });
+    } else {
+      setSex({
+        'f': false,
+        [target]: true
+      });
+    }
+    
+    setVerifyAlert('');
   }
 
   return (
@@ -78,12 +102,12 @@ export default function SignUp({ handleSignUpClick }: Props) {
       <div>
         <p>sex</p>
         <label>
-          남
-          <input type='checkbox' value='남'></input>
+          <p>남</p>
+          <input type='checkbox' value='남' checked={sex.m} onChange={()=>handleSexChoice('m')}></input>
         </label>
         <label>
-          여
-          <input type='checkbox' value='여'></input>
+          <p>여</p>
+          <input type='checkbox' value='여' checked={sex.f} onChange={()=>handleSexChoice('f')}></input>
         </label>
       </div>
       
@@ -93,7 +117,7 @@ export default function SignUp({ handleSignUpClick }: Props) {
         <StyledButton 
           onClick={signUpBtnHandler}
           disabled={verifyAlert !== ''}>
-        회원가입
+          회원가입
         </StyledButton>
       </div>
         

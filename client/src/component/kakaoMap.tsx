@@ -101,10 +101,10 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
       
       const marker = new kakao.maps.Marker({
-          map: kakaoMap,
-          position: new kakao.maps.LatLng(el.lat, el.long),
-          title : el.title,
-          image : markerImage, 
+        map: kakaoMap,
+        position: new kakao.maps.LatLng(el.lat, el.long),
+        title : el.title,
+        image : markerImage, 
       });
 
       const overlay = new kakao.maps.CustomOverlay({
