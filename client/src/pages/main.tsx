@@ -63,6 +63,7 @@ export default function Main() {
 
       <div>
         {areaRoom.map(room => {
+          console.log(areaRoom)
           return (
             <div key={room.id} onClick={()=>navToRoom(room)}>{room.title} / {room.intro} / members: </div>
         )})}
