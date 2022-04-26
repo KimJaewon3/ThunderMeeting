@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnyIfEmpty, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import infoWindow from "../api/infoWindow";
+import { StyledCommonButton } from "../App.style";
 import { RootState } from "../modules";
 import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import { RoomType } from "../modules/room";
@@ -176,8 +178,8 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
 
   return (
     <div>
-      <div id="map" style={{ width: "500px", height: "500px" }}></div>
-      <button onClick={goToMyLocation}>내 위치로 이동하기</button>
+      <div id="map" style={{ width: "600px", height: "600px", marginBottom: "20px" }}></div>
+      <StyledCommonButton onClick={goToMyLocation}>내 위치로 이동하기</StyledCommonButton>
     </div>
   );
 }

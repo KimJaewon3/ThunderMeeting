@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { emailReg, nameReg, nickReg, phoneReg } from "../api/inputValueReg";
 import { APIURL } from "../App";
-import { StyledButton, StyledCommonModal } from "../App.style";
+import { StyledCommonButton, StyledCommonModal } from "../App.style";
 
 const StyledModal = styled(StyledCommonModal)`
   align-items: unset;
@@ -114,11 +114,11 @@ export default function SignUp({ handleSignUpClick }: Props) {
       <p className="verify-alert">{verifyAlert}</p>
       
       <div className="btn-box">
-        <StyledButton 
+        <StyledCommonButton 
           onClick={signUpBtnHandler}
           disabled={verifyAlert !== ''}>
           회원가입
-        </StyledButton>
+        </StyledCommonButton>
       </div>
         
     </StyledModal>

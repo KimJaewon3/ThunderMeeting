@@ -1,13 +1,24 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { APIURL } from "../App";
-import { StyledModalBack, StyledNavLink } from "../App.style";
+import { StyledCommonImg, StyledModalBack, StyledNavLink } from "../App.style";
 import CreateRoom from "../component/createRoom";
 import KakaoMap from "../component/kakaoMap";
+import RoomList from "../component/roomLIst";
 import { RootState } from "../modules";
 import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import { RoomType, updateRoomList } from "../modules/room";
+import crowd from "../images/crowd.webp";
+
+const StyledMapContainer = styled.div`
+  display: flex;
+  > div {
+    margin: 20px;
+    flex: 1;
+  }
+`;
 
 export type MapLocation = {
   lat: number | null;
@@ -24,11 +35,7 @@ export default function Main() {
     address: '',
   });
   const [ areaRoom, setAreaRoom ] = useState<RoomType[]>([]);
-  const [ currentLocation, setCurrentLocation ] = useState();
-  const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
 
-  const isSignIn = useSelector((state: RootState) => state.signReducer.isSignIn);
-  
   useEffect(() => {
     APIURL.post("/room/roomList")
       .then(res => {
@@ -44,32 +51,24 @@ export default function Main() {
     setMapLocation({ lat, long, address });
   }
 
-  function navToRoom(room: RoomType) {
-    if (!isSignIn) {
-      dispatch(updateIsSignInModalOpen(true));
-    } else {
-      nav('/room', {state: {roomInfo: room}});
-    }
-  }
-
   return (
     <div>
-      <div>main</div>
-
-      <div>
+      <StyledMapContainer>
         <KakaoMap handleSetMapLocation={handleSetMapLocation} handleSetAreaRoom={handleSetAreaRoom}></KakaoMap>
         <CreateRoom mapLocation={mapLocation} />
-      </div>
-
+      </StyledMapContainer>
+      <hr/>
       <div>
-        {areaRoom.map(room => {
-          console.log(areaRoom)
-          return (
-            <div key={room.id} onClick={()=>navToRoom(room)}>{room.title} / {room.intro} / members: </div>
-        )})}
+        <h2>방 목록</h2>
+        <div>
+          {areaRoom.map(room => {
+            return <RoomList key={room.id} roomInfo={room}/>
+          })}
+        </div>
       </div>
 
-       
+      <StyledCommonImg src={crowd} />
+
     </div>
   );
 }
