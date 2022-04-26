@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { APIURL } from "../App";
-import { StyledCommonModal, StyledButton } from "../App.style";
+import { StyledCommonModal, StyledCommonButton } from "../App.style";
 import { isSignIn } from "../modules/sign";
 import { updateAccessToken } from "../modules/token";
 import { updateUserInfo } from "../modules/userInfo";
@@ -64,8 +64,8 @@ export default function SignIn({ handleSignInClick, handleSignUpClick }: Props) 
         <input onChange={e=>textInputHandler('password', e)}></input>
       </div>
       <div className="btn-box">
-        <StyledButton onClick={signInBtnHandler}>Sign In</StyledButton>
-        <StyledButton onClick={signUpBtnHandler}>Sign Up</StyledButton>
+        <StyledCommonButton onClick={signInBtnHandler}>Sign In</StyledCommonButton>
+        <StyledCommonButton onClick={signUpBtnHandler}>Sign Up</StyledCommonButton>
       </div>
     </StyledModal>
   );

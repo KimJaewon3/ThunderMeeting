@@ -44,10 +44,8 @@ export const StyledCommonModal = styled.div`
   }
 `;
 
-export const StyledButton = styled.button`
-  width: 7em;
+export const StyledCommonButton = styled.button`
   padding: 0.5em;
-  margin: 1em;
   background-color: #ffd448;
   border: #a18817 1px solid;
   border-radius: 5px;
@@ -57,4 +55,13 @@ export const StyledButton = styled.button`
   & + & {
     margin-left: 2em;
   }
+`;
+
+export const StyledInput = styled.input`
+  padding: 5px;
+`;
+
+export const StyledCommonImg = styled.img`
+  display: block;
+  margin: 0 auto;
 `;

@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { APIURL } from "../App";
-import { StyledCommonModal, StyledButton } from "../App.style";
+import { StyledCommonButton, StyledCommonModal, StyledInput } from "../App.style";
 import { RootState } from "../modules";
 import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import { MapLocation } from "../pages/main";
 import ConfirmMeeting from "./confirmMeeting";
 
-const StyledModal = styled(StyledCommonModal)`
-  .btn-box {
-    margin: 0 auto;
+const StyledCreateRoomContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  > h3 {
+    margin: 0px;
   }
 `;
 
@@ -61,7 +65,7 @@ export default function CreateRoom({ mapLocation }: Props) {
       return '약속 시간을 설정해 주세요';
     }
     if (!datatimeVerify) {
-      return '아직 과거로의 여행은 구현하지 못했어요... 다시 선택해주세요';
+      return '아직 과거로 갈 수 없어요... 다시 선택해주세요';
     }
     return '';
   }
@@ -110,39 +114,44 @@ export default function CreateRoom({ mapLocation }: Props) {
   
   return (
     <div>
-      <div>
-        <p>방 제목</p>
-        <input onChange={e=>handleTextInput('title', e)}></input>
-      </div>
+      <StyledCreateRoomContainer>
+        <h3>방 만들기</h3>
 
-      <div>
-        <p>방 소개</p>
-        <input onChange={e=>handleTextInput('intro', e)}></input>
-      </div>
+        <div>
+          <p>{"<방 제목>"}</p>     
+          <StyledInput onChange={e=>handleTextInput('title', e)}></StyledInput>
+        </div>
 
-      <div>
-        <p>약속 위치<span>(지도에서 원하는 위치를 클릭해주세요)</span></p>
-        <div>{mapLocation.address}</div>
-      </div>
+        <div>
+          <p>{"<방 소개>"}</p>
+          <StyledInput onChange={e=>handleTextInput('intro', e)}></StyledInput>
+        </div>
 
-      <div>
-        <p>{datetime}</p>
-        <button onClick={()=>handleSetIsDatetimeOpen(!isDatetimeOpen)}>
-          {isDatetimeOpen ? '확인' : '약속 시간 정하기'}
-        </button>
-        {isDatetimeOpen && <ConfirmMeeting 
-          handleSetDatetime={handleSetDatetime} 
-          handleSetDatatimeVerify={handleSetDatatimeVerify}
-        />}
-      </div>
-      
-      <div>
-        <p>{alertText}</p>
-      </div>
+        <div>
+          <p>{"<약속 위치>"}<br/><span style={{color: "#838383"}}>(지도에서 원하는 위치를 클릭해주세요)</span></p>
+          <div>{mapLocation.address}</div>
+        </div>
 
-      <div className="btn-box">
-        <StyledButton onClick={handleCreateBtnClick}>방 생성하기</StyledButton>
-      </div>
+        <div>
+          {isDatetimeOpen && <ConfirmMeeting 
+            handleSetDatetime={handleSetDatetime} 
+            handleSetDatatimeVerify={handleSetDatatimeVerify}
+          />}
+          <p>{"<약속 시간>"}</p>
+          <button onClick={()=>handleSetIsDatetimeOpen(!isDatetimeOpen)}>
+            {isDatetimeOpen ? '확인' : '약속 시간 정하기'}
+          </button>
+          <p>{datetime}</p>
+        </div>
+        
+        <div>
+          <p>{alertText}</p>
+        </div>
+
+        <div className="btn-box">
+          <StyledCommonButton onClick={handleCreateBtnClick}>방 만들기</StyledCommonButton>
+        </div>
+      </StyledCreateRoomContainer>
     </div>
   ) 
 }

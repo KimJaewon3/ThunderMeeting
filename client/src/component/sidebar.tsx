@@ -61,7 +61,6 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
       sangme: textInput,
       id: userInfo.id,
     }).then(res => {
-      console.log(res);
       setIsWritingSangme(false);
       dispatch(updateSangme(textInput));
     }).catch(err => console.log(err));

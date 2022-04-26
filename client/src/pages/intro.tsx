@@ -8,6 +8,7 @@ import { RootState } from "../modules";
 import { RoomType } from "../modules/room";
 import people from "../images/people.png";
 import { FaArrowAltCircleRight } from "react-icons/fa";
+import RoomList from "../component/roomLIst";
 
 const StyledListContainer = styled.div`
   display: flex;
@@ -17,16 +18,10 @@ const StyledListContainer = styled.div`
   }
 `;
 
-const StyledUl = styled.ul`
+const StyledDiv = styled.div`
   border: 2px solid black;
   border-radius: 20px;
   background-color: #fafdda;
-  > li {
-    margin: 10px 10px 20px 10px;
-  }
-  span {
-    opacity: 0.7;
-  }
 `;
 
 const StyledImg = styled.img`
@@ -46,17 +41,6 @@ export default function Intro() {
     }).catch(err => console.log(err));
   }, [isSignIn]);
 
-  function renderRoomLi(el: RoomType) {
-    return (
-      <li key={el.id} onClick={()=>nav('/room', { state: { roomInfo: el} })}>
-        <div><span>방 제목:</span> {el.title}</div>
-        <div><span>방 소개:</span> {el.intro}</div>
-        <div><span>약속 시간:</span> {el.datetime}</div>
-        <div><span>약속 장소:</span> {el.address}</div>
-      </li>
-    );
-  }
-
   return (
     <div>
       <h1>원하는 지역에서 약속을 잡고 여러 사람들과 만나볼 수 있습니다!</h1>
@@ -65,28 +49,28 @@ export default function Intro() {
       <StyledListContainer>
         <div>
           <h3>약속 목록</h3>
-          <StyledUl>
-          {joinedRoomList.filter(el => el.confirm !== 'N').length === 0 ? (
-            <li>아직 약속이 없어요...</li>
-          ) : (
-            joinedRoomList.filter(el => el.confirm !== 'N').map(el => {
-              return renderRoomLi(el);
-            })
-          )}
-          </StyledUl>
+          <StyledDiv>
+            {joinedRoomList.filter(el => el.confirm !== 'N').length === 0 ? (
+              <div>아직 약속이 없어요...</div>
+            ) : (
+              joinedRoomList.filter(el => el.confirm !== 'N').map(el => {
+                return <RoomList key={el.id} roomInfo={el}/>
+              })
+            )}
+          </StyledDiv>
         </div>
         
         <div>
           <h3>참여중인 방 목록</h3>
-          <StyledUl>
+          <StyledDiv>
           {joinedRoomList.length === 0 ? (
-            <li>아직 참여중인 방이 없어요...</li>
+            <div>아직 참여중인 방이 없어요...</div>
           ) : (
             joinedRoomList.map(el => {
-              return renderRoomLi(el);
+              return <RoomList key={el.id} roomInfo={el}/>
             })
           )}
-          </StyledUl>
+          </StyledDiv>
         </div>
       </StyledListContainer>
 
