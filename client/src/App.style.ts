@@ -45,7 +45,7 @@ export const StyledCommonModal = styled.div`
 `;
 
 export const StyledCommonButton = styled.button`
-  padding: 0.5em;
+  padding: 5px;
   background-color: #ffd448;
   border: #a18817 1px solid;
   border-radius: 5px;

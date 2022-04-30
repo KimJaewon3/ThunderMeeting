@@ -15,7 +15,7 @@ const StyledSidebar = styled.div`
   background-color: #724e00;
   color: white;
   height: 96vh;
-  width: 10vh;
+  width: 10vw;
   display: flex;
   flex-direction: column;
   padding: 2vh;
@@ -27,6 +27,21 @@ const StyledSidebar = styled.div`
     align-items:center;
     >* {
       margin-right: 1em;
+    }
+  }
+  .sidebar-sangme-container {
+    display: flex;
+    flex-direction: column;
+    textarea {
+      height: 5em;
+      resize: none;
+    }
+    .sidebar-sangme-btn-box {
+      display: flex;
+      flex-direction: row-reverse;
+      button {
+        margin-left: 5px;
+      }
     }
   }
 `;
@@ -55,8 +70,6 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
   }
 
   function submitSangme() {
-    console.log(textInput);
-    
     APIURL.patch('account/createSangme', {
       sangme: textInput,
       id: userInfo.id,
@@ -80,9 +93,12 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
       <p>{userInfo.nick}</p>
       <div>
         {isWritingSangme ? (
-          <div>
+          <div className="sidebar-sangme-container">
             <textarea defaultValue={textInput} onChange={e=>handleTextInput(e)}></textarea>
-            <button onClick={submitSangme}>확인</button>
+            <div className="sidebar-sangme-btn-box">
+              <button onClick={()=>setIsWritingSangme(false)}>취소</button>
+              <button onClick={submitSangme}>확인</button>
+            </div>
           </div>
         ) : (
           <p>{userInfo.sangme.length === 0 ? '상태 메세지를 작성해보세요!' : userInfo.sangme}</p>
