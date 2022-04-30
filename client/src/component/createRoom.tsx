@@ -17,6 +17,9 @@ const StyledCreateRoomContainer = styled.div`
   > h3 {
     margin: 0px;
   }
+  .create-room-alert {
+    color: red;
+  }
 `;
 
 declare global {
@@ -145,7 +148,7 @@ export default function CreateRoom({ mapLocation }: Props) {
         </div>
         
         <div>
-          <p>{alertText}</p>
+          <p className="create-room-alert">{alertText}</p>
         </div>
 
         <div className="btn-box">

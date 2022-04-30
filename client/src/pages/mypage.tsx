@@ -1,10 +1,33 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { emailReg, nameReg, nickReg, phoneReg } from "../api/inputValueReg";
 import { APIURL } from "../App";
+import { StyledCommonButton, StyledInput } from "../App.style";
 import { RootState } from "../modules";
 import { updateUserInfo } from "../modules/userInfo";
+
+const StyledMypage = styled.div`
+  display: flex;
+  > div {
+    margin: 20px;
+    flex: 1;
+  }
+  .userinfo-content {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 50px;
+    > :first-child {
+      width: 7em;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  }
+  .mypage-btn-container {
+    display: flex;
+  }
+`;
 
 type TextInput = {
   [key: string]: string;
@@ -64,13 +87,13 @@ export default function Mypage() {
 
   function modifiableInfo(el: string) {
     if (el === 'email' || el === 'sex' || el === 'like') {
-      return <p>{userInfo[el]}</p>;
+      return <div>{userInfo[el]}</div>;
     }
 
     if (isModify) {
-      return <input onChange={(e)=>handleTextInput(el, e)} value={textInput[el]}></input>
+      return <StyledInput onChange={(e)=>handleTextInput(el, e)} value={textInput[el]}/>;
     } else {
-      return <p>{userInfo[el]}</p>
+      return <div>{userInfo[el]}</div>;
     }
   }
 
@@ -100,27 +123,38 @@ export default function Mypage() {
   }
 
   return (
-    <div>
-      <div>
-        {Object.keys(userInfo).map((el, idx) => {
-          if (el === 'id') return;
-          return (
-            <div key={idx}>
-              <p>{el}</p>
-              {modifiableInfo(el)}
+    <StyledMypage>
+      <div className="mypage-userinfo">
+        <div>
+          {Object.keys(userInfo).map((el, idx) => {
+            if (el === 'id') return;
+            return (
+              <div key={idx} className='userinfo-content'>
+                <div>{el}</div>
+                {modifiableInfo(el)}
+              </div>
+            );
+          })}
+        </div>
+
+        <p>{verifyAlert}</p>
+
+        <div className="mypage-btn-container">
+          {isModify ? (
+            <div>
+              <StyledCommonButton onClick={handleSaveInfo} disabled={verifyAlert !== ''}>수정 완료</StyledCommonButton>
+              <StyledCommonButton onClick={handleClickCancel}>취소</StyledCommonButton>
             </div>
-          );
-        })}
+          ) : (
+            <StyledCommonButton onClick={handleModifyInfo}>정보 수정</StyledCommonButton>
+          )}
+          <StyledCommonButton onClick={()=>{nav('/modifyPw')}}>비밀번호 변경</StyledCommonButton>
+        </div>
       </div>
-
-      <p>{verifyAlert}</p>
 
       <div>
-        {!isModify && <button onClick={handleModifyInfo}>정보 수정</button>}
-        {isModify && <button onClick={handleSaveInfo} disabled={verifyAlert !== ''}>수정 완료</button>}
-        <button onClick={()=>{nav('/modifyPw')}}>비밀번호 변경</button>
-        <button onClick={handleClickCancel}>취소</button>
+        프로필
       </div>
-    </div>
+    </StyledMypage>
   );
 }

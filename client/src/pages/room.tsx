@@ -9,7 +9,42 @@ import { ChatType, updateChat } from "../modules/chat";
 import Chat from "../component/chat";
 import MemberInfoOverlay from "../component/memberInfoOverlay";
 import { userInfoType } from "../modules/userInfo";
-import ConfirmMeeting from "../component/confirmMeeting";
+import styled from "styled-components";
+import { StyledCommonButton } from "../App.style";
+
+const StyledRoom = styled.div`
+  display: flex;
+  flex-direction: column;
+  & > * {
+    padding: 10px;
+    border-radius: 10px;
+    > span {
+      color: #7f7f7f;
+      font-style: italic;
+    }
+  }
+  .room-confirm-container {
+    background-color: #2bb131c9;
+  }
+  .room-roomInfo-container {
+    p {
+      font-size: 2em;
+    }
+  }
+  .room-member-container {
+    display: flex;
+    .room-member-list {
+      background-color: #cecece;
+      padding: 10px;
+      border-radius: 10px;
+      margin-right: 10px;
+    }
+  }
+`;
+
+const StyledButton = styled(StyledCommonButton)`
+  background-color: #d2d2d2;
+`;
 
 type Location = {
   roomInfo: RoomType;
@@ -38,7 +73,7 @@ export default function Room() {
     });
 
     socketClient.on("connect", () => {
-      console.log('connect');
+      //  console.log('connect');
     });
 
     socketClient.emit('join_room', {
@@ -191,44 +226,41 @@ export default function Room() {
   }
 
   return (
-    <div>
+    <StyledRoom>
       {roomInfo.confirm === 'Y' && 
-        <div>
-          <p>{roomInfo.address}</p>
-          <p>{roomInfo.datetime}</p>
-          <p>약속 확정 !!!</p>
+        <div className="room-confirm-container">
+          <div>약속 확정 !!!</div>
+          <div>{roomInfo.address}</div>
+          <div>{roomInfo.datetime}</div>
         </div>
       }
-
-      <div>{roomInfo.title}</div>
-      <div>{roomInfo.intro}</div>
-      <hr/>
       
-
-      <hr/>
+      <div className="room-roomInfo-container">
+        <p>{roomInfo.title}</p>
+        <div>{roomInfo.intro}</div>
+      </div>
+      
       <div>{adminNoti}</div>
 
-      <div>
+      <div>참여중인 맴버<span>(닉네임에 마우스를 올려 자세히 볼수 있어요)</span></div>
+      <div className="room-member-container">
         {memberList.map((el, idx) => {
           return (
-            <div key={idx}>
+            <div key={idx} className='room-member-list'>
               <div onMouseOver={e=>showMemberInfo(e, el)} onMouseLeave={e=>closeMemberInfo(e)}>{el.nick}</div>
             </div>
         )})}
         {isMemberInfoOpen && <MemberInfoOverlay xpos={pos.xpos} ypos={pos.ypos} info={memberInfo} />}
       </div>
 
-      <hr />
       {memberList[0]?.id === userInfo.id  && roomInfo.confirm === 'N' && <button onClick={handleConfirmBtnClick}>약속 잡기</button>}
-
-      <hr/>
 
       <Chat sendMsg={sendMsg} chats={chats} ></Chat>
 
       <div>
-        <button onClick={leaveRoom}>방 나가기</button>
+        <StyledButton className="room-exit-btn" onClick={leaveRoom}>방 나가기</StyledButton>
       </div>    
-    </div>
+    </StyledRoom>
   );
 }
  

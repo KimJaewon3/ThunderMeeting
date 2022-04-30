@@ -16,8 +16,11 @@ const StyledMemberInfoOverlay = styled.div<StyledProps>`
   position: absolute;
   top: ${props => props.ypos + 'px'};
   left: ${props => props.xpos + 'px'};
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 10px;
   z-index: 3;
-  background-color: #8d8d8d;
 `;
 
 export default function MemberInfoOverlay({ xpos, ypos, info }: Props) {
