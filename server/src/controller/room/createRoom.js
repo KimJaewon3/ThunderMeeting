@@ -2,7 +2,6 @@ const { Room } = require("../../../orm");
 
 async function createRoom(req, res) {
   try {
-    console.log(req.body)
     const { title, intro, lat, long, address, datetime } = req.body;
 
     const createResult = await Room.create({

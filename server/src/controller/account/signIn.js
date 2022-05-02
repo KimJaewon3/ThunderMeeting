@@ -19,7 +19,7 @@ async function singIn(req, res) {
       return res.status(404).json({ message: 'check email or password' });
     }
 
-    const accessToken = jwt.sign({...findResult}, process.env.ACCESS_SECRET, {
+    const accessToken = jwt.sign(findResult.dataValues, process.env.ACCESS_SECRET, {
       expiresIn: "1d",
     });
 

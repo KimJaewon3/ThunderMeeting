@@ -2,8 +2,9 @@ const { Members } = require("../../../orm");
 
 async function joinMembers(req, res) {
   try {
-    const { roomId, userId } = req.body;
-
+    const { roomId } = req.body;
+    const userId = req.userId;
+    
     const result = await Members.findOne({
       where: {
         userId: userId,

@@ -2,8 +2,6 @@ const { Room, Members, User } = require("../../../orm");
 
 async function roomList(req, res) {
   try {
-    // req 위치 들어올꺼임
-
     const listResult = await Room.findAll({
       attributes : {
         exclude: ['createdAt', 'updatedAt']

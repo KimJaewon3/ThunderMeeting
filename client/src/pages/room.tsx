@@ -8,9 +8,11 @@ import { io, Socket } from "socket.io-client";
 import { ChatType, updateChat } from "../modules/chat";
 import Chat from "../component/chat";
 import MemberInfoOverlay from "../component/memberInfoOverlay";
-import { userInfoType } from "../modules/userInfo";
+import { deleteUserInfo, userInfoType } from "../modules/userInfo";
 import styled from "styled-components";
 import { StyledCommonButton } from "../App.style";
+import { updateAccessToken } from "../modules/token";
+import { isSignIn } from "../modules/sign";
 
 const StyledRoom = styled.div`
   display: flex;
@@ -53,7 +55,8 @@ type Location = {
 let socketClient: Socket;
 
 export default function Room() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const nav = useNavigate();
   const location = useLocation();
   const locationState = location.state as Location;
   const roomInfoState = locationState.roomInfo;
@@ -64,6 +67,7 @@ export default function Room() {
 
 
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
   
   useEffect(() => {
     apiCallBack();
@@ -121,12 +125,16 @@ export default function Room() {
     // 방 맴버에 추가 (신규)
     await APIURL.post('/members/joinMembers', {
       roomId: roomInfo.id,
-      userId: userInfo.id,
-    })
-    .then((res) => {
-      // console.log(res)
-    })
-    .catch(err => console.log(err));
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      }
+    }).catch(err => {
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        responseErrCallback();
+      }
+    });
 
     // 방 맴버 리스트 가져오기
     await APIURL.post('/members/getMembers', {
@@ -169,14 +177,21 @@ export default function Room() {
     await APIURL.post('chats/createChats', {
       content: msgInfo.msg,
       createdAt: msgInfo.createdAt,
-      userId: msgInfo.written.userId,
       roomId: roomInfo.id,
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      }
     })
     .then(res=> {
-      // console.log(res);
       dispatchMsg(msgInfo);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        responseErrCallback();
+      }
+    });
   }
 
   function dispatchMsg(msgInfo: ChatType) {
@@ -193,11 +208,19 @@ export default function Room() {
 
     // 명시적으로 나갔을떄만 맴버에서 떠남 // 잠깐 어디 갓다오는건 상관 x
     APIURL.post("/members/leaveMembers", {
-      userId: userInfo.id,
       roomId: roomInfo.id,
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      }
+    }).catch(err => {
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        responseErrCallback();
+      }
     });
 
-    navigate('/main');
+    nav('/main');
   }
 
   const [ isMemberInfoOpen, setIsMemberInfoOpen ] = useState(false);
@@ -219,10 +242,24 @@ export default function Room() {
     APIURL.patch("/room/confirmMeeting", {
       roomId: roomInfo.id,
     }).then(res => {
-      console.log(res);
       socketClient.emit('send_confirm_meeting', res.data.data);
       setRoomInfo(res.data.data);
     }).catch(err => console.log(err));
+  }
+
+  const [ isAccessErr, setIsAccessErr ] = useState(false);
+
+  useEffect(() => {
+    if (isAccessErr) {
+      nav('/');
+    }
+  }, [isAccessErr]);
+
+  function responseErrCallback() {
+    dispatch(updateAccessToken(''));
+    dispatch(isSignIn(false));
+    dispatch(deleteUserInfo());
+    setIsAccessErr(true);
   }
 
   return (
