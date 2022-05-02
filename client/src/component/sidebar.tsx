@@ -82,8 +82,14 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
       setIsWritingSangme(false);
       dispatch(updateSangme(textInput));
     }).catch(err => {
-      console.log(err.response.data.message);
-      handleSignOut();
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        handleSidebarOpen(false);
+        dispatch(updateAccessToken(''));
+        dispatch(isSignIn(false));
+        dispatch(deleteUserInfo());
+        window.location.reload();
+      }
     });
   }
 

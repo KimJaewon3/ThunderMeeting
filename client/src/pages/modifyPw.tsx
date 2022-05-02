@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { APIURL } from "../App";
@@ -43,7 +43,15 @@ export default function ModifyPw() {
       nav("/");
     })
     .catch((err) => {
-      setResultAlert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        alert(err.response.data.message);
+        dispatch(updateAccessToken(''));
+        dispatch(isSignIn(false));
+        dispatch(deleteUserInfo());
+        nav("/");
+      } else {
+        setResultAlert(err.response.data.message);
+      }
     });
   }
 

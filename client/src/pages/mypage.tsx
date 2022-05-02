@@ -121,10 +121,12 @@ export default function Mypage() {
     })
     .catch(err => {
       alert(err.response.data.message);
-      dispatch(updateAccessToken(''));
-      dispatch(isSignIn(false));
-      dispatch(deleteUserInfo());
-      nav('/');
+      if (err.response.data.data === 'access-token-error') {
+        dispatch(updateAccessToken(''));
+        dispatch(isSignIn(false));
+        dispatch(deleteUserInfo());
+        nav('/')
+      }
     });
   }
 

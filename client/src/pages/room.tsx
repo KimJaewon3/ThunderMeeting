@@ -129,12 +129,11 @@ export default function Room() {
       headers: {
         authorization: `Bearer ${accessToken}`,
       }
-    })
-    .then((res) => {
-      // console.log(res)
-    })
-    .catch(err => {
-      responseErrCallback(err);
+    }).catch(err => {
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        responseErrCallback();
+      }
     });
 
     // 방 맴버 리스트 가져오기
@@ -185,11 +184,13 @@ export default function Room() {
       }
     })
     .then(res=> {
-      // console.log(res);
       dispatchMsg(msgInfo);
     })
     .catch(err => {
-      responseErrCallback(err);
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        responseErrCallback();
+      }
     });
   }
 
@@ -213,7 +214,10 @@ export default function Room() {
         authorization: `Bearer ${accessToken}`,
       }
     }).catch(err => {
-      responseErrCallback(err);
+      alert(err.response.data.message);
+      if (err.response.data.data === 'access-token-error') {
+        responseErrCallback();
+      }
     });
 
     nav('/main');
@@ -243,12 +247,19 @@ export default function Room() {
     }).catch(err => console.log(err));
   }
 
-  function responseErrCallback(err: any) {
-    alert(err.response.data.message);
+  const [ isAccessErr, setIsAccessErr ] = useState(false);
+
+  useEffect(() => {
+    if (isAccessErr) {
+      nav('/');
+    }
+  }, [isAccessErr]);
+
+  function responseErrCallback() {
     dispatch(updateAccessToken(''));
     dispatch(isSignIn(false));
     dispatch(deleteUserInfo());
-    nav('/');
+    setIsAccessErr(true);
   }
 
   return (
