@@ -54,14 +54,15 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
   const dispatch = useDispatch();
   const nav = useNavigate();
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
   const [ isWritingSangme, setIsWritingSangme ] = useState(false);
   const [ textInput, setTextInput ] = useState(userInfo.sangme);
 
   function handleSignOut() {
+    handleSidebarOpen(false);
     dispatch(updateAccessToken(''));
     dispatch(isSignIn(false));
     dispatch(deleteUserInfo());
-    handleSidebarOpen(false);
     nav('/');
   }
 
@@ -73,10 +74,17 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
     APIURL.patch('account/createSangme', {
       sangme: textInput,
       id: userInfo.id,
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      }
     }).then(res => {
       setIsWritingSangme(false);
       dispatch(updateSangme(textInput));
-    }).catch(err => console.log(err));
+    }).catch(err => {
+      console.log(err.response.data.message);
+      handleSignOut();
+    });
   }
 
   function handleTextInput(e: React.ChangeEvent<HTMLTextAreaElement>) {

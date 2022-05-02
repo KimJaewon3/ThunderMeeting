@@ -33,6 +33,7 @@ export default function Intro() {
   const nav = useNavigate();
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   const isSignIn = useSelector((state: RootState) => state.signReducer);
+  const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
   const [ joinedRoomList, setJoinedRoomList ] = useState<RoomType[]>([]);
 
   useEffect(() => {

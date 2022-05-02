@@ -2,8 +2,8 @@ const { User } = require("../../../orm");
 
 async function createSangme(req, res) {
   try {
-    console.log(req.body);
-    const { id, sangme } = req.body;
+    const { sangme } = req.body;
+    const id = req.userId;
     
     const modifyResult = await User.update({
       sangme: sangme,  

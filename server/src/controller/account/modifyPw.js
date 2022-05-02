@@ -3,8 +3,9 @@ const { User } = require("../../../orm");
 
 async function modifyPw(req, res) {
   try {
-    const { id, oldPw, newPw, verifyNewPw } = req.body;
-
+    const { oldPw, newPw, verifyNewPw } = req.body;
+    const id = req.userId;
+    
     const oldPwResult = await User.findOne({
       where: {
         id: id,

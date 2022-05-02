@@ -6,7 +6,9 @@ import { emailReg, nameReg, nickReg, phoneReg } from "../api/inputValueReg";
 import { APIURL } from "../App";
 import { StyledCommonButton, StyledInput } from "../App.style";
 import { RootState } from "../modules";
-import { updateUserInfo } from "../modules/userInfo";
+import { isSignIn } from "../modules/sign";
+import { updateAccessToken } from "../modules/token";
+import { deleteUserInfo, updateUserInfo } from "../modules/userInfo";
 
 const StyledMypage = styled.div`
   display: flex;
@@ -41,6 +43,7 @@ export default function Mypage() {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
   const [ isModify, setIsModify ] = useState(false);
   const [ verifyAlert, setVerifyAlert ] = useState('');
   const initialTextInput = {
@@ -102,6 +105,10 @@ export default function Mypage() {
     await APIURL.patch("/account/modifyInfo", {
       id: userInfo.id,
       ...textInput,
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      }
     })
     .then(res => {
       console.log(res.data.data)
@@ -113,7 +120,11 @@ export default function Mypage() {
       // token 추가
     })
     .catch(err => {
-      console.log(err.response.data.message);
+      alert(err.response.data.message);
+      dispatch(updateAccessToken(''));
+      dispatch(isSignIn(false));
+      dispatch(deleteUserInfo());
+      nav('/');
     });
   }
 

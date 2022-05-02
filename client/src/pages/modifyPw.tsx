@@ -17,6 +17,7 @@ export default function ModifyPw() {
   });
   const [ resultAlert, setResultAlert ] = useState('');
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
   
   function handleTextInput(target: string, e: React.ChangeEvent<HTMLInputElement>) {
     setTextInput({
@@ -29,13 +30,17 @@ export default function ModifyPw() {
     APIURL.patch('/account/modifyPw', {
       id: userInfo.id,
       ...textInput,
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      }
     })
     .then(res => {
       alert(`${res.data.message}\n다시 로그인해 주세요`);
       dispatch(updateAccessToken(''));
       dispatch(isSignIn(false));
       dispatch(deleteUserInfo());
-      nav("/intro");
+      nav("/");
     })
     .catch((err) => {
       setResultAlert(err.response.data.message);

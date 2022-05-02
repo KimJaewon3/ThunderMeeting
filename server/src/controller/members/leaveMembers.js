@@ -2,7 +2,8 @@ const { Members } = require("../../../orm");
 
 async function leaveMembers(req, res) {
   try {
-    const { roomId, userId } = req.body;
+    const { roomId } = req.body;
+    const userId = req.userId;
 
     const result = await Members.destroy({
       where: {
