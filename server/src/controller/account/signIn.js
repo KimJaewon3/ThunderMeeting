@@ -20,7 +20,7 @@ async function singIn(req, res) {
     }
 
     const accessToken = jwt.sign(findResult.dataValues, process.env.ACCESS_SECRET, {
-      expiresIn: "5s",
+      expiresIn: "1d",
     });
 
     return res.status(200).json({ data: {
