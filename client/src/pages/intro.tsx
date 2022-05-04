@@ -22,6 +22,9 @@ const StyledDiv = styled.div`
   border: 2px solid black;
   border-radius: 20px;
   background-color: #fafdda;
+  .list-alert {
+    margin: 20px;
+  }
 `;
 
 const StyledImg = styled.img`
@@ -52,7 +55,7 @@ export default function Intro() {
           <h3>약속 목록</h3>
           <StyledDiv>
             {joinedRoomList.filter(el => el.confirm !== 'N').length === 0 ? (
-              <div>아직 약속이 없어요...</div>
+              <div className="list-alert">아직 약속이 없어요...</div>
             ) : (
               joinedRoomList.filter(el => el.confirm !== 'N').map(el => {
                 return <RoomList key={el.id} roomInfo={el}/>
@@ -65,7 +68,7 @@ export default function Intro() {
           <h3>참여중인 방 목록</h3>
           <StyledDiv>
           {joinedRoomList.length === 0 ? (
-            <div>아직 참여중인 방이 없어요...</div>
+            <div className="list-alert">아직 참여중인 방이 없어요...</div>
           ) : (
             joinedRoomList.map(el => {
               return <RoomList key={el.id} roomInfo={el}/>

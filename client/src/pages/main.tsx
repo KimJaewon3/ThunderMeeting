@@ -66,9 +66,8 @@ export default function Main() {
           })}
         </div>
       </div>
-
+      
       <StyledCommonImg src={crowd} />
-
     </div>
   );
 }

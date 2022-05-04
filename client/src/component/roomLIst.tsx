@@ -14,7 +14,6 @@ const StyledDiv = styled.div`
   border: 2px solid #b09027;;
   border-radius: 5px;
   padding: 5px;
-  list-style: none;
   &:hover {
     background-color: #e7aa25;
   }
