@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import { StyledCommonButton, StyledInput } from "../App.style";
@@ -12,9 +12,15 @@ type Props = {
 
 export default function Chat({ sendMsg, chats }: Props) {
   const [ textInput, setTextInput ] = useState('');
-
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
+  let chatContainer = useRef<HTMLDivElement>(null);
   
+  useEffect(() => {
+    if (chatContainer.current) {
+      chatContainer.current.scrollTop = chatContainer.current?.scrollHeight;
+    }
+  }, [chats]);
+
   function handleSendBtn() {
     if (textInput === '') return;
     sendMsg({
@@ -35,7 +41,7 @@ export default function Chat({ sendMsg, chats }: Props) {
 
   return (
     <StyledChat>
-      <div className="chat-container">
+      <div className="chat-container" ref={chatContainer}>
         {
         chats.map((el, idx) => {
           const writer = el.written.userId === userInfo.id ? 'me' : 'other'; 
@@ -70,7 +76,7 @@ const StyledChat = styled.div`
     background-color: #d2d2d2;
     min-height: 50vh;
     max-height: 50vh;
-    overflow: auto;
+    overflow-y: auto;
   }
   .chat-submit-container {
     display: flex;
