@@ -10,6 +10,7 @@ import Intro from './pages/intro';
 import axios from 'axios';
 import ModifyPw from './pages/modifyPw';
 import styled from 'styled-components';
+import ReviewBoard from './pages/review';
 
 export const APIURL = axios.create({
   baseURL: process.env.REACT_APP_API_URL_DEV,
@@ -36,6 +37,7 @@ function App() {
             <Route path="/room" element={<Room />} />
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/modifyPw" element={<ModifyPw />} />
+            <Route path="/reviewBoard" element={<ReviewBoard/>} />
           </Routes>
         </StyledSection>
       </div>

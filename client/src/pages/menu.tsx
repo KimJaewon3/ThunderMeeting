@@ -5,17 +5,49 @@ import { StyledModalBack, StyledNavLink } from "../App.style";
 import SignIn from "../component/signIn";
 import SignUp from "../component/signUp";
 import { RootState } from "../modules";
-import { AiOutlineBars } from 'react-icons/ai';
+import { AiOutlineBars, AiTwotoneThunderbolt } from 'react-icons/ai';
 import Sidebar from "../component/sidebar";
 import { updateIsSignInModalOpen } from "../modules/modalOpen";
+import smoke from "../images/smoke.png";
 
-const StyledMenu = styled.nav`
-  display: flex;
+const StyledMenu = styled.div`
   background-color: #ffd448;
-  padding: 3em;
-  justify-content: space-between;
-  .sign {
-    width: 5em;
+  > div {
+    display: flex;
+    padding: 3em 0 3em 0;
+    align-items: center;
+    font: italic bold 20px serif;
+    .sign {
+      width: 5em;
+    }
+    &:first-child {
+      margin-left: 25vw;
+    }
+    &:last-child {
+      margin-right: 25vw;
+    }
+    > * {
+      flex: 1;
+      display: flex;
+      flex-direction: row-reverse;
+    }
+    > :first-child{
+      display: flex;
+      flex-direction: row;
+    }
+  }
+  img {
+    display: none;
+    margin-left: 5px;
+    width: 50px;
+  }
+  .menu-icon:hover {
+    display: flex;
+    transition: transform 0.1s linear;
+    transform: translateX(-5px);
+    img {
+      display: block;
+    }
   }
 `;
 
@@ -62,15 +94,45 @@ export default function Menu() {
   return (
     <div>
       <StyledMenu>
-        <StyledNavLink to={'/'}>로고(intro)</StyledNavLink>
-        <StyledNavLink to={'/main'}>thunder(main)</StyledNavLink>
-        {isSignInState ? (
-          <div className="sign" onClick={()=>handleSidebarOpen(true)}>
-            <AiOutlineBars/>
-          </div>
-        ) : (
-          <div className="sign" onClick={()=>handleSignInClick(true)}>Sign In</div>
-        )} 
+        <div>
+          <StyledNavLink to={'/'}>
+              <div>
+                <AiTwotoneThunderbolt size={50} />
+                <div>thunder</div>
+              </div>
+              <img src={smoke}/>
+          </StyledNavLink>
+
+          <StyledNavLink to={'/main'}>
+            <div className="menu-icon"> 
+              <p>약속 잡기</p>  
+              <img src={smoke}/>
+            </div>
+          </StyledNavLink>
+
+          <StyledNavLink to={'/'}>
+            <div className="menu-icon"> 
+              <p>약속 확인</p>  
+              <img src={smoke}/>
+            </div>
+          </StyledNavLink>
+
+          <StyledNavLink to={'/reviewBoard'}>
+            <div className="menu-icon"> 
+              <p>후기 게시판</p>  
+              <img src={smoke}/>
+            </div>
+          </StyledNavLink>
+          
+
+          {isSignInState ? (
+            <div className="sign" onClick={()=>handleSidebarOpen(true)}>
+              <AiOutlineBars/>
+            </div>
+          ) : (
+            <div className="sign" onClick={()=>handleSignInClick(true)}>로그인</div>
+          )} 
+        </div>
       </StyledMenu>
 
       {isSideBarOpen &&
