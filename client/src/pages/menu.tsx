@@ -117,13 +117,14 @@ export default function Menu() {
             </div>
           </StyledNavLink>
 
+          {/*
           <StyledNavLink to={'/reviewBoard'}>
             <div className="menu-icon"> 
               <p>후기 게시판</p>  
               <img src={smoke}/>
             </div>
           </StyledNavLink>
-          
+          */}
 
           {isSignInState ? (
             <div className="sign" onClick={()=>handleSidebarOpen(true)}>

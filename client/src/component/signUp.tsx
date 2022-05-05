@@ -66,7 +66,8 @@ export default function SignUp({ handleSignUpClick }: Props) {
     APIURL
       .post('/account/signUp', {
         ...textInput,
-        sex: sex.m ? 'm' : 'f'
+        sex: sex.m ? 'm' : 'f',
+        profileImage: process.env.REACT_APP_AWS_DEFAULT_PROFILE_IMAGE,
       })
       .then(res => {
         handleSignUpClick(false);
