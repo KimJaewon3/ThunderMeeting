@@ -37,7 +37,7 @@ function App() {
             <Route path="/room" element={<Room />} />
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/modifyPw" element={<ModifyPw />} />
-            <Route path="/reviewBoard" element={<ReviewBoard/>} />
+            {/*<Route path="/reviewBoard" element={<ReviewBoard/>} />*/}
           </Routes>
         </StyledSection>
       </div>

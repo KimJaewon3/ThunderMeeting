@@ -2,7 +2,7 @@ const { User } = require("../../../orm");
 
 async function signUp(req, res) {
   try {
-    const { name, email, password, nick, mbti, phone, sex } = req.body;
+    const { name, email, password, nick, mbti, phone, sex, profileImage } = req.body;
     console.log(req.body);
 
     const findResult = await User.findOne({
@@ -10,12 +10,10 @@ async function signUp(req, res) {
         email: email,
       }
     });
-    console.log(findResult);
 
     if (findResult) {
       return res.status(409).json({ message: `이미 존재하는 이메일입니다.` });
     }
-
   
     const createResult = await User.create({
       name: name,
@@ -26,6 +24,7 @@ async function signUp(req, res) {
       phone: phone,
       sex: sex,
       like: 0,
+      profileImage: profileImage,
     });
 
     return res.status(201).json({data:createResult, message:'아이디 생성!'});
@@ -36,5 +35,5 @@ async function signUp(req, res) {
 }
 
 module.exports = {
-  signUp
+  signUp,
 };

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { emailReg, nameReg, nickReg, phoneReg } from "../api/inputValueReg";
 import { APIURL } from "../App";
 import { StyledCommonButton, StyledInput } from "../App.style";
+import ProfileImage from "../component/profileImage";
 import { RootState } from "../modules";
 import { isSignIn } from "../modules/sign";
 import { updateAccessToken } from "../modules/token";
@@ -166,7 +167,7 @@ export default function Mypage() {
       </div>
 
       <div>
-        프로필
+        <ProfileImage />
       </div>
     </StyledMypage>
   );

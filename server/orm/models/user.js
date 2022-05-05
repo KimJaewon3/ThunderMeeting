@@ -20,6 +20,10 @@ const user = {
   sangme: {
     type: DataTypes.STRING,
     defaultValue: "",
+  },
+  profileImage: {
+    type: DataTypes.STRING,
+    defaultValue: "",
   }
 }
 
