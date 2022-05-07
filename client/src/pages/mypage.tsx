@@ -126,7 +126,7 @@ export default function Mypage() {
         dispatch(updateAccessToken(''));
         dispatch(isSignIn(false));
         dispatch(deleteUserInfo());
-        nav('/')
+        nav('/');
       }
     });
   }
@@ -141,7 +141,7 @@ export default function Mypage() {
       <div className="mypage-userinfo">
         <div>
           {Object.keys(userInfo).map((el, idx) => {
-            if (el === 'id') return;
+            if (el === 'id' || el === 'profileImage') return;
             return (
               <div key={idx} className='userinfo-content'>
                 <div>{el}</div>
