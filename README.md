@@ -4,6 +4,9 @@
 
 원하는 장소, 시간에 약속을 잡을 수 있게 도와주는 플랫폼입니다.
 
+# 사이트 주소
+링크
+
 # 웹 페이지 정보
 [웹 페이지 정보 노션 링크](https://pinnate-tortoise-471.notion.site/62ec759d569c4cffae77aaa98ef24464)
 
