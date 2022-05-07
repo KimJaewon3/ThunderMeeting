@@ -5,7 +5,7 @@ import { updateAccessToken } from "../modules/token";
 import { isSignIn } from "../modules/sign";
 import { deleteUserInfo, updateSangme } from "../modules/userInfo";
 import styled from "styled-components";
-import { StyledNavLink } from "../App.style";
+import { StyledNavLink, StyledProfileImgBox } from "../App.style";
 import { RootState } from "../modules";
 import { BsPencil } from "react-icons/bs";
 import { useState } from "react";
@@ -43,6 +43,9 @@ const StyledSidebar = styled.div`
         margin-left: 5px;
       }
     }
+  }
+  .sidebar-nick {
+    font-size: large;
   }
 `;
 
@@ -104,7 +107,12 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
   
   return (
     <StyledSidebar>
-      <p>{userInfo.nick}</p>
+      <div>
+        <StyledProfileImgBox size="100px">
+          <img src={userInfo.profileImage}/>
+        </StyledProfileImgBox>
+        <p className="sidebar-nick">{userInfo.nick}</p>
+      </div>
       <div>
         {isWritingSangme ? (
           <div className="sidebar-sangme-container">
@@ -119,10 +127,10 @@ export default function Sidebar({ handleSidebarOpen }: Props) {
         )}
         <BsPencil onClick={writeSangme}/>
       </div>
-      <StyledNavLink to={'/mypage'} sidebar='true'>MyPage</StyledNavLink>
-      <div onClick={goToIntro}>약속 보기</div>
+      <StyledNavLink to={'/mypage'} sidebar='true'>- MyPage</StyledNavLink>
+      <div onClick={goToIntro}>- 약속 보기</div>
       <div className="sign-out-box">
-        <GrLogout/>
+        <GrLogout />
         <p onClick={handleSignOut}>Sign Out</p>
       </div>
     </StyledSidebar>

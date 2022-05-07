@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { StyledModalBack, StyledNavLink } from "../App.style";
@@ -9,6 +9,11 @@ import { AiOutlineBars, AiTwotoneThunderbolt } from 'react-icons/ai';
 import Sidebar from "../component/sidebar";
 import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import smoke from "../images/smoke.png";
+import { APIURL } from "../App";
+import { updateAccessToken } from "../modules/token";
+import { isSignIn } from "../modules/sign";
+import { deleteUserInfo } from "../modules/userInfo";
+import { useNavigate } from "react-router-dom";
 
 const StyledMenu = styled.div`
   background-color: #ffd448;
@@ -44,10 +49,8 @@ const StyledMenu = styled.div`
   .menu-icon:hover {
     display: flex;
     transition: transform 0.1s linear;
-    transform: translateX(-5px);
-    img {
-      display: block;
-    }
+    transform: translateX(-10px);
+    
   }
 `;
 
@@ -58,12 +61,31 @@ const StyledClearModalBack = styled(StyledModalBack)`
 `;
 
 export default function Menu() {
+  const nav = useNavigate();
   const dispatch = useDispatch();
   const [ isSideBarOpen, setIsSideBarOpen ] = useState(false);
-  // const [ isSignInOpen, setIsSignInOpen ] = useState(false);
   const [ isSignUpOpen, setIsSignUpOpen ] = useState(false);
   const isSignInState = useSelector((state: RootState) => state.signReducer.isSignIn);
   const isSignInModalOpen = useSelector((state: RootState) => state.modalOpenReducer.isSignInModalOpen);
+  const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
+
+  useEffect(() => {
+    if (isSignInState) {
+      APIURL.get("/account/vaildAccount", {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        }
+      }).catch(err => {
+        if (err.response.data.data === 'access-token-error') {
+          alert(err.response.data.message);
+          dispatch(updateAccessToken(''));
+          dispatch(isSignIn(false));
+          dispatch(deleteUserInfo());
+          nav("/");
+        }
+      });
+    }
+  }, []);
 
   function handleSidebarOpen(val: boolean) {
     setIsSideBarOpen(val);
@@ -96,24 +118,21 @@ export default function Menu() {
       <StyledMenu>
         <div>
           <StyledNavLink to={'/'}>
-              <div>
-                <AiTwotoneThunderbolt size={50} />
-                <div>thunder</div>
-              </div>
-              <img src={smoke}/>
+            <div>
+              <AiTwotoneThunderbolt size={50} />
+              <div>thunder</div>
+            </div>
           </StyledNavLink>
 
           <StyledNavLink to={'/main'}>
             <div className="menu-icon"> 
               <p>약속 잡기</p>  
-              <img src={smoke}/>
             </div>
           </StyledNavLink>
 
           <StyledNavLink to={'/'}>
             <div className="menu-icon"> 
               <p>약속 확인</p>  
-              <img src={smoke}/>
             </div>
           </StyledNavLink>
 

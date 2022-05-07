@@ -65,3 +65,18 @@ export const StyledCommonImg = styled.img`
   display: block;
   margin: 0 auto;
 `;
+
+export const StyledProfileImgBox = styled.div<{ size: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: ${props => props.size};
+  height: ${props => props.size};
+  overflow: hidden;
+  border: 2px solid black;
+  border-radius: 50%;
+  img {
+    max-height: ${props => props.size};
+    max-width: ${props => props.size};
+  }
+`;
