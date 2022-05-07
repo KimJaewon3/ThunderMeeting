@@ -9,29 +9,15 @@ import { APIURL } from "../App";
 import { deleteUserInfo, updateProfileImage } from "../modules/userInfo";
 import styled from "styled-components";
 import loading from "../images/loading.jpg";
-import { StyledCommonButton } from "../App.style";
+import { StyledCommonButton, StyledProfileImgBox } from "../App.style";
 import { updateAccessToken } from "../modules/token";
 import { isSignIn } from "../modules/sign";
 import { useNavigate } from "react-router-dom";
 
-const StyledProfileImg = styled.div`
+const StyledProfileImgContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .profileImg-Img-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    height: 250px;
-    overflow: hidden;
-    border: 2px solid black;
-    border-radius: 50%;
-    img {
-      max-height: 250px;
-      max-width: 250px;
-    }
-  }
   .profileImg-button-container {
     display: flex;
     margin-top: 2em;
@@ -137,7 +123,6 @@ export default function ProfileImage() {
         authorization: `Bearer ${accessToken}`,
       }
     }).then(res => {
-      console.log(res);
       setIsLoading(false);
       dispatch(updateProfileImage(url));
       revokeChangeImg();
@@ -162,8 +147,8 @@ export default function ProfileImage() {
   }
 
   return (
-    <StyledProfileImg>
-      <div className="profileImg-Img-container">
+    <StyledProfileImgContainer>
+      <StyledProfileImgBox size="250px">
         {isLoading ? (
           <img src={loading}/>
         ) : (
@@ -173,7 +158,7 @@ export default function ProfileImage() {
             <img src={userInfo.profileImage}/>
           )
         )}
-      </div>
+      </StyledProfileImgBox>
       
       <div className="profileImg-button-container">
         <StyledCommonButton onClick={choiceImg}>이미지 선택</StyledCommonButton>
@@ -187,6 +172,6 @@ export default function ProfileImage() {
       <div>
         {alertText}
       </div>
-    </StyledProfileImg>
+    </StyledProfileImgContainer>
   );
 }

@@ -34,15 +34,13 @@ export default function ModifyPw() {
       headers: {
         authorization: `Bearer ${accessToken}`,
       }
-    })
-    .then(res => {
+    }).then(res => {
       alert(`${res.data.message}\n다시 로그인해 주세요`);
       dispatch(updateAccessToken(''));
       dispatch(isSignIn(false));
       dispatch(deleteUserInfo());
       nav("/");
-    })
-    .catch((err) => {
+    }).catch((err) => {
       if (err.response.data.data === 'access-token-error') {
         alert(err.response.data.message);
         dispatch(updateAccessToken(''));
