@@ -7,7 +7,37 @@ import { RootState } from "../modules";
 import { useEffect, useState } from "react";
 import { APIURL } from "../App";
 import { updateProfileImage } from "../modules/userInfo";
+import styled from "styled-components";
+import loading from "../images/loading.jpg";
+import { StyledCommonButton } from "../App.style";
 
+const StyledProfileImg = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .profileImg-Img-container {
+    img {
+      min-width: 250px;
+      min-height: 250px;
+      max-width: 250px;
+      max-height: 250px;
+      border-radius: 50%;
+    }
+  }
+  .profileImg-button-container {
+    display: flex;
+    margin-top: 2em;
+    .submit-revoke-btn-container {
+      display: flex;
+      div {
+        margin-left: 1em;
+      }
+      div:hover {
+        color: #03838f;
+      }
+    }
+  }
+`;
 
 const s3Config = {
   bucketName: String(process.env.REACT_APP_AWS_BUCKET),
@@ -39,9 +69,9 @@ export default function ProfileImage() {
   const userInfo = useSelector((state: RootState) => state.userInfoReducer);
   const accessToken = useSelector((state: RootState) => state.tokenReducer.accessToken);
 
-  
-
   function choiceImg() {
+    URL.revokeObjectURL(previewImg.url);
+
     const input = document.createElement('input');
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
@@ -101,7 +131,6 @@ export default function ProfileImage() {
       }).then(res => {
         console.log(res);
         setIsLoading(false);
-        setAlertText(res.data.message);
         dispatch(updateProfileImage(url));
         revokeChangeImg();
       }).catch(err => {
@@ -123,10 +152,10 @@ export default function ProfileImage() {
   }
 
   return (
-    <div>
-      <div>
+    <StyledProfileImg>
+      <div className="profileImg-Img-container">
         {isLoading ? (
-          <div>loading</div>
+          <img src={loading}/>
         ) : (
           isModify ? (
             <img src={previewImg.url}/>
@@ -136,18 +165,18 @@ export default function ProfileImage() {
         )}
       </div>
       
-      <div>
-        <button onClick={choiceImg}>이미지 선택</button>
+      <div className="profileImg-button-container">
+        <StyledCommonButton onClick={choiceImg}>이미지 선택</StyledCommonButton>
         {isModify && (
-          <div>
-            <button onClick={submitImg}>완료</button>
-            <button onClick={revokeChangeImg}>취소</button>
+          <div className="submit-revoke-btn-container">
+            <div onClick={submitImg}>변경</div>
+            <div onClick={revokeChangeImg}>취소</div>
           </div>
         )}
       </div>
       <div>
         {alertText}
       </div>
-    </div>
+    </StyledProfileImg>
   );
 }
