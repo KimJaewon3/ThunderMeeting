@@ -5,4 +5,5 @@ module.exports = {
   modifyPw: require("./modifyPw"),
   createSangme: require('./createSangme'),
   profileImg: require("./profileImg"),
+  vaildAccount: require("./vaildAccount"),
 }

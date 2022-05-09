@@ -9,6 +9,6 @@ router.patch("/modifyInfo", verifyAccessToken, accountController.modifyInfo.modi
 router.patch("/modifyPw", verifyAccessToken, accountController.modifyPw.modifyPw);
 router.patch("/createSangme", verifyAccessToken, accountController.createSangme.createSangme);
 router.patch("/profileImg", verifyAccessToken, accountController.profileImg.profileImg);
-router.get("/vaildAccount", verifyAccessToken);
+router.get("/vaildAccount", verifyAccessToken, accountController.vaildAccount.vaildAccount);
 
 module.exports = router;

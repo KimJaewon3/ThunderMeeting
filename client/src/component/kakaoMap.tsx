@@ -9,6 +9,24 @@ import { updateIsSignInModalOpen } from "../modules/modalOpen";
 import { RoomType } from "../modules/room";
 import { MapLocation } from "../pages/main";
 
+const StyledSearchBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  .address-search-box {
+    display: flex;
+    align-items: center;
+    > * {
+      margin-left: 5px;
+    }
+    .find-address-alert {
+      color: red;
+    }
+    input {
+      padding: 5px;
+    }
+  }
+`;
+
 declare global {
   interface Window {
     kakao: any;
@@ -25,6 +43,8 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
   const dispatch = useDispatch();
   const nav = useNavigate();
   const [ kakaoMap, setKakaoMap ] = useState<any>();
+  const [ searchInput, setSearchInput ] = useState('');
+  const [ canFindAddress, setCanFindAddress ] = useState(true);
   const roomList = useSelector((state: RootState) => state.roomReducer.roomList);
 
   useEffect(() => {
@@ -84,8 +104,8 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
         createRoomMarker.setMap(null);
       }
       createRoomMarker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(lat, long), 
-        image: markerImage
+        position: new kakao.maps.LatLng(lat, long),
+        image: markerImage,
       });
       createRoomMarker.setMap(map);  
     });
@@ -125,30 +145,24 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
     });
   }, [roomList]);
 
-  // gps
-  function getGeoLocation() {
+  // 내 위치로 이동하기
+  function goToMyLocation() {
+    if (!kakaoMap) return;
+
     const option = {
       enableHighAccuracy: false,
       maximumAge: 1000 * 3600 * 24,
       timeout: Infinity,
     };
 
-    return new Promise((resolve, reject) => {
-      return navigator.geolocation.getCurrentPosition(resolve, reject, option);
-    });
-  }
-
-  // 내 위치로 이동하기
-  async function goToMyLocation() {
-    if (!kakaoMap) return;
-
-    await getGeoLocation().then((res: any) => {
+    navigator.geolocation.getCurrentPosition((res) => {
       const lat = res.coords.latitude;
       const long = res.coords.longitude;
-      kakaoMap.panTo(new kakao.maps.LatLng(lat, long));
-    });
-
-    findRoomsInArea(kakaoMap);
+      kakaoMap.setCenter(new kakao.maps.LatLng(lat, long));
+      findRoomsInArea(kakaoMap);
+    }, (err) => {
+      alert(`${err.code}): ${err.message}`);
+    }, option);
   }
 
   // 지도 범위내 방 리스트
@@ -158,13 +172,12 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
     const swLng = bounds.getSouthWest().getLng();
     const neLat = bounds.getNorthEast().getLat();
     const neLng = bounds.getNorthEast().getLng();
-
     const rooms = roomList.filter(el => {
       const roomLat = Number(el.lat);
       const roomLng = Number(el.long);
       return (roomLat > swLat && roomLat < neLat && roomLng > swLng && roomLng < neLng);
     });
-
+    
     handleSetAreaRoom(rooms);
   }
 
@@ -176,10 +189,38 @@ export default function KakaoMap({ handleSetMapLocation, handleSetAreaRoom }: Pr
     }
   }
 
+  function inputHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchInput(e.target.value);
+  }
+
+  function searchByAddress() {
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch(searchInput, function(result: any, status: any) {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        kakaoMap.setCenter(coords);
+        setCanFindAddress(true);
+        findRoomsInArea(kakaoMap);
+      } else {
+        setCanFindAddress(false);
+      }
+    });
+    setSearchInput('');
+  }
+
   return (
     <div>
       <div id="map" style={{ width: "600px", height: "600px", marginBottom: "20px" }}></div>
-      <StyledCommonButton onClick={goToMyLocation}>내 위치로 이동하기</StyledCommonButton>
+      <StyledSearchBox>
+        <div>
+          <StyledCommonButton onClick={goToMyLocation}>내 위치 바로가기</StyledCommonButton>
+        </div>
+        <div className="address-search-box">
+          {!canFindAddress && <div className="find-address-alert">다른 주소를 입력해주세요.</div>}
+          <input value={searchInput} onChange={e=>inputHandler(e)}/>
+          <StyledCommonButton onClick={searchByAddress}>주소로 검색하기</StyledCommonButton>
+        </div>
+      </StyledSearchBox>
     </div>
   );
 }

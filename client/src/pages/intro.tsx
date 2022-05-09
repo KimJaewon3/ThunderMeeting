@@ -47,7 +47,7 @@ export default function Intro() {
 
   return (
     <div>
-      <h1>원하는 지역에서 약속을 잡고 여러 사람들과 만나볼 수 있습니다!</h1>
+      <h1>원하는 장소, 시간에 약속을 잡고 여러 사람들과 만나볼 수 있습니다!</h1>
       <h2>지금 바로 약속을 잡아보세요! <FaArrowAltCircleRight onClick={()=>nav('/main')}/></h2>
       
       <StyledListContainer>

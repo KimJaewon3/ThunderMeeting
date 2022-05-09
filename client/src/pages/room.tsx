@@ -141,7 +141,6 @@ export default function Room() {
       roomId: roomInfo.id,
     })
     .then(res => {
-      // console.log(res.data.data);
       const data = res.data.data;
       setMemberList(memberList => data.map((el: any) => {
         return el.user;
