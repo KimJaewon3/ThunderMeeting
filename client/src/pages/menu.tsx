@@ -75,9 +75,12 @@ export default function Menu() {
         headers: {
           authorization: `Bearer ${accessToken}`,
         }
+      }).then(res => {
+        // console.log(res)
       }).catch(err => {
         if (err.response.data.data === 'access-token-error') {
           alert(err.response.data.message);
+          console.log(err.response.data.message)
           dispatch(updateAccessToken(''));
           dispatch(isSignIn(false));
           dispatch(deleteUserInfo());

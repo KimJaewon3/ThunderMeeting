@@ -1,4 +1,3 @@
-
 import { S3Client, PutObjectCommand, ListObjectsCommand, DeleteObjectCommand,  } from "@aws-sdk/client-s3";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
@@ -36,9 +35,9 @@ const StyledProfileImgContainer = styled.div`
 const s3Config = {
   bucketName: String(process.env.REACT_APP_AWS_BUCKET),
   region: String(process.env.REACT_APP_AWS_DEFAULT_REGION),
-  accessKeyId: String(process.env.REACT_APP_AWS_ACCESS_KEY_ID),
-  secretAccessKey: String(process.env.REACT_APP_AWS_SECRET_ACCESS_KEY),
-  poolId: String(process.env.REACT_APP_AWS_IDENTITY_POOL_ID)
+  poolId: String(process.env.REACT_APP_AWS_IDENTITY_POOL_ID),
+  // accessKeyId: String(process.env.REACT_APP_AWS_ACCESS_KEY_ID),
+  // secretAccessKey: String(process.env.REACT_APP_AWS_SECRET_ACCESS_KEY),
 };
 
 const s3 = new S3Client({
