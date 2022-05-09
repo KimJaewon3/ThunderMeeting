@@ -90,7 +90,6 @@ export default function CreateRoom({ mapLocation }: Props) {
         datetime,
       })
       .then(res => {
-        console.log(res.data.data)
         const roomInfo = res.data.data;
         delete roomInfo.createdAt;
         delete roomInfo.updatedAt;
@@ -142,7 +141,7 @@ export default function CreateRoom({ mapLocation }: Props) {
           />}
           <p>{"<약속 시간>"}</p>
           <button onClick={()=>handleSetIsDatetimeOpen(!isDatetimeOpen)}>
-            {isDatetimeOpen ? '확인' : '약속 시간 정하기'}
+            {isDatetimeOpen ? '확인' : '시간 선택하기'}
           </button>
           <p>{datetime}</p>
         </div>

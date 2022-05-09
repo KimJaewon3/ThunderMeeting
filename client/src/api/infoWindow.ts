@@ -13,7 +13,7 @@ export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: 
 
   const titleDiv = document.createElement('div');
   titleDiv.className = "title";
-  titleDiv.innerHTML = roomInfo.title;
+  titleDiv.textContent = roomInfo.title;
 
   const closeDiv = document.createElement('div');
   closeDiv.className = "close";
@@ -26,18 +26,20 @@ export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: 
   bodyDiv.className = "body";
   bodyDiv.innerHTML = `
     <div>
-      <div>모집글: ${roomInfo.intro}</div>
+      <div><span>소개글:</span> ${roomInfo.intro}</div>
     </div> 
     <div>
-      <div>장소: ${roomInfo.address}</div>
+      <div><span>장소:</span> ${roomInfo.address}</div>
     </div>
     <div>
-      <div>시간: ${roomInfo.datetime}</div>
+      <div><span>시간:</span> ${roomInfo.datetime}</div>
     </div>
   `;
 
   const linkDiv = document.createElement('div');
-  linkDiv.innerHTML = '입장하기';
+  linkDiv.innerHTML = `
+    <button>입장하기<button>
+  `;
 
   titleDiv.appendChild(closeDiv);
   infoDiv.appendChild(titleDiv);
@@ -53,11 +55,13 @@ export default function infoWindow(roomInfo: RoomType, overlay: any, navToRoom: 
     overlay.setZIndex(0);
   });
 
-  linkDiv.addEventListener('click', () => {
-    const state = localStorage.getItem('persist:root');
-    if (typeof state === 'string') {
-      const isSignIn = JSON.parse(JSON.parse(state).signReducer).isSignIn;
-      navToRoom(roomInfo, isSignIn);
+  linkDiv.addEventListener('click', (e) => {
+    if (e.currentTarget !== e.target) {
+      const state = localStorage.getItem('persist:root');
+      if (typeof state === 'string') {
+        const isSignIn = JSON.parse(JSON.parse(state).signReducer).isSignIn;
+        navToRoom(roomInfo, isSignIn);
+      }
     }
   });
   
