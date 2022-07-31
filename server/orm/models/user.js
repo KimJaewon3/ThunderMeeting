@@ -17,6 +17,14 @@ const user = {
   phone: DataTypes.STRING,
   like: DataTypes.INTEGER,
   sex: DataTypes.STRING,
+  sangme: {
+    type: DataTypes.STRING,
+    defaultValue: "",
+  },
+  profileImage: {
+    type: DataTypes.STRING,
+    defaultValue: "",
+  }
 }
 
-module.exports = user
+module.exports = user;

@@ -7,6 +7,7 @@ const chats = {
     primaryKey: true
   },
   content: DataTypes.STRING,
+  createdAt: DataTypes.STRING,
 }
 
-module.exports = chats
+module.exports = chats;

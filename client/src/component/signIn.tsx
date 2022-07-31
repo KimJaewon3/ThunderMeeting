@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { APIURL } from "../App";
-import { getUserInfo } from "../modules/userInfo";
+import { StyledCommonModal, StyledCommonButton } from "../App.style";
+import { isSignIn } from "../modules/sign";
+import { updateAccessToken } from "../modules/token";
+import { updateUserInfo } from "../modules/userInfo";
+
+const StyledModal = styled(StyledCommonModal)`
+  .btn-box {
+    margin: 0 auto;
+  }
+`;
 
 type Props = {
   handleSignInClick: (val: boolean) => void;
@@ -28,8 +39,10 @@ export default function SignIn({ handleSignInClick, handleSignUpClick }: Props) 
     APIURL
       .post('/account/signIn', textInput)
       .then(res => {
-        console.log(res)
-        dispatch(getUserInfo(res.data.data));
+        // console.log(res.data.data)
+        dispatch(updateUserInfo(res.data.data.userInfo));
+        dispatch(updateAccessToken(res.data.data.accessToken));
+        dispatch(isSignIn(true));
         handleSignInClick(false);
       })
       .catch(err => console.log(err));
@@ -37,16 +50,23 @@ export default function SignIn({ handleSignInClick, handleSignUpClick }: Props) 
 
   function signUpBtnHandler() {
     handleSignUpClick(true);
+    handleSignInClick(false);
   }
 
   return (
-    <div>
-      <p>Email(Id)</p>
-      <input onChange={e=>textInputHandler('email', e)}></input>
-      <p>Password</p>
-      <input onChange={e=>textInputHandler('password', e)}></input>
-      <button onClick={signInBtnHandler}>Sign In</button>
-      <button onClick={signUpBtnHandler}>Sign Up</button>
-    </div>
+    <StyledModal>
+      <div>
+        <p>Email(Id)</p>
+        <input onChange={e=>textInputHandler('email', e)}></input>
+      </div>
+      <div>
+        <p>Password</p>
+        <input onChange={e=>textInputHandler('password', e)}></input>
+      </div>
+      <div className="btn-box">
+        <StyledCommonButton onClick={signInBtnHandler}>Sign In</StyledCommonButton>
+        <StyledCommonButton onClick={signUpBtnHandler}>Sign Up</StyledCommonButton>
+      </div>
+    </StyledModal>
   );
 }
