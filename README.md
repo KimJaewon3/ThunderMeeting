@@ -8,6 +8,10 @@ https://thundermeeting.net/
 <br/>
 <br/>
 
+## 실행 방법
+```npm start```
+<br/>
+<br/>
 ## 사용 스택
 ### Front-End
 - TypeScript
