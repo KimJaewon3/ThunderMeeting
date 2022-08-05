@@ -12,35 +12,6 @@ https://thundermeeting.net/
 ```npm start```
 <br/>
 <br/>
-## 사용 스택
-### Front-End
-- TypeScript
-- React
-- Redux
-- Styled-Components
-- socket-io-client
-
-### Back-End
-- Node JS
-- Express
-- socket-io
-- MYSQL
-- Sequelize ORM
-- JWT
-- AWS(RDS)
-
-### Deploy
-- AWS
-  - EC2
-  - S3
-  - Route 53
-  - CloudFront
-
-### API
-- kakaomap API
-
- 
-<br/>
 
 ## 기능
 ### 메뉴
@@ -103,6 +74,36 @@ https://thundermeeting.net/
 2. 상태 메세지를 작성할 수 있습니다.
 3. 로그아웃할 수 있습니다.
 ```
+ 
+<br/>
+
+## 사용 스택
+### Front-End
+- TypeScript
+- React
+- Redux
+- Styled-Components
+- socket-io-client
+
+### Back-End
+- Node JS
+- Express
+- socket-io
+- MYSQL
+- Sequelize ORM
+- JWT
+- AWS(RDS)
+
+### Deploy
+- AWS
+  - EC2
+  - S3
+  - Route 53
+  - CloudFront
+
+### API
+- kakaomap API
+
  
 <br/>
 
