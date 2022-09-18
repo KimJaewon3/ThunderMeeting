@@ -141,4 +141,4 @@ https://thundermeeting.net/
 <br/>
 
 ## dev log
-[블로그 ](https://pinnate-tortoise-471.notion.site/ThunderMeeting-016aa98e2e684fd8a6aeb12539a8f7fa)
+[블로그 링크](https://pinnate-tortoise-471.notion.site/ThunderMeeting-016aa98e2e684fd8a6aeb12539a8f7fa)
