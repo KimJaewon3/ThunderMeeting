@@ -24,20 +24,10 @@ https://thundermeeting.net/
     ```
   <details>
    <summary>기능 시연</summary>
-
+     <img src='https://user-images.githubusercontent.com/79837001/190994469-6ec8133e-b59d-4b69-bc14-b26ddfe408d5.gif'/>
   </details>    
     <br/>
 
-- ### 홈페이지
-    ```
-        1. 참여중인 방과 확정된 약속들의 목록을 확인할 수 있습니다.
-        2. 클릭을 통해 해당 방으로 바로 이동할 수 있습니다.
-    ```
-  <details>
-   <summary>기능 시연</summary>
-
-  </details>    
-    <br/>
 
 - ### 약속 잡기 페이지
   - #### 지도
@@ -46,31 +36,21 @@ https://thundermeeting.net/
         2. 현재 보이는 지도에 모집글이 마커로 표시되고 클릭하여 상세정보를 확인할 수 있습니다.
         3. 입장하기 버튼을 통해 방으로 입장할 수 있습니다.
     ```
-      <details>
-       <summary>기능 시연</summary>
-
-      </details>    
-
   - #### 방 생성하기
     ```
         1. 제목, 간단한 소개글, 위치, 날짜, 시간을 정해 방을 생성할 수 있습니다.
         2. 지도에서 원하는 위치를 클릭하면 주소가 자동으로 입력됩니다.
         3. 모달을 통해 시간을 선택할 수 있습니다.
     ```
-      <details>
-       <summary>기능 시연</summary>
-
-      </details>    
-
   - #### 방 목록
     ```
         1. 현재 보이는 지도 내의 방 목록을 나열해줍니다.
         2. 모집 정보가 표시되며 클릭하여 방으로 입장할 수 있습니다.
     ```
-      <details>
-       <summary>기능 시연</summary>
-
-      </details>    
+  <details>
+   <summary>기능 시연</summary>
+      <img src='https://user-images.githubusercontent.com/79837001/190994460-19f1e7fe-9c3a-4a02-9f04-8bdfc1a76481.gif'/>
+  </details>    
 <br/>
 
 - ### 방 페이지
@@ -90,9 +70,21 @@ https://thundermeeting.net/
     ```
   <details>
    <summary>기능 시연</summary>
-
+      <img src='https://user-images.githubusercontent.com/79837001/190994447-171762db-c16a-429a-a6bb-b7225aaa313f.gif'/>
   </details>    
 <br/>
+
+- ### 약속 확인 페이지
+    ```
+        1. 참여중인 방과 확정된 약속들의 목록을 확인할 수 있습니다.
+        2. 클릭을 통해 해당 방으로 바로 이동할 수 있습니다.
+    ```
+  <details>
+   <summary>기능 시연</summary>
+     <img src='https://user-images.githubusercontent.com/79837001/190995792-27ed0db0-285f-4cfb-a2c0-758c8ec2e8eb.gif'/>
+  </details>    
+    <br/>
+
 
 - ### 마이 페이지
     ```
@@ -101,7 +93,7 @@ https://thundermeeting.net/
     ```
   <details>
    <summary>기능 시연</summary>
-
+        <img src='https://user-images.githubusercontent.com/79837001/190994422-23037f8e-e432-4957-b28b-5a8ae2c13cbe.gif'/>
   </details>    
 <br/>
 
