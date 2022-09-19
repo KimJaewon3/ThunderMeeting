@@ -103,31 +103,31 @@ https://thundermeeting.net/
 <br/>
 
 ## 사용 스택
-### Front-End
-`TypeScript`
-`React`
-`Redux`
-`Styled-Components`
-`socket-io-client`
+- #### Front-End
+    `TypeScript`
+    `React`
+    `Redux`
+    `Styled-Components`
+    `socket-io-client`
 
-### Back-End
-`Node JS`
-`Express`
-`socket-io`
-`MYSQL`
-`Sequelize ORM`
-`JWT`
-`AWS(RDS)`
+- #### Back-End
+    `Node JS`
+    `Express`
+    `socket-io`
+    `MYSQL`
+    `Sequelize ORM`
+    `JWT`
+    `AWS(RDS)`
 
-### Deploy
-- AWS  
-`EC2`
-`S3`
-`Route 53`
-`CloudFront`
+- #### Deploy
+    - AWS  
+    `EC2`
+    `S3`
+    `Route 53`
+    `CloudFront`
 
-### API
-`kakaomap API`
+- #### API
+    `kakaomap API`
 
  
 <br/>
