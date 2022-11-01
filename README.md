@@ -10,6 +10,9 @@ https://thundermeeting.net/
 
 ## 실행 방법
 ```npm start```
+ - ### test 계정
+   - id: `test1@test.com`
+   - pw: `1234`
 <br/>
 <br/>
 
